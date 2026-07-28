@@ -40,4 +40,4 @@ private:
     std::unordered_map<uint32_t, NodeInfo> nodes_;
 };
 
-} // namespace vde
+}

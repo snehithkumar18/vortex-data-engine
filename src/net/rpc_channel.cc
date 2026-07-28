@@ -11,7 +11,7 @@ OwnedBuffer RpcChannel::process_incoming_raw(Span<const byte_t> wire_data) {
 
     ByteReader reader(wire_data);
     auto magic = reader.read_u32_le();
-    if (!magic.has_value() || magic.value != 0x01435052) return OwnedBuffer(); // "RPC\x01"
+    if (!magic.has_value() || magic.value != 0x01435052) return OwnedBuffer();
 
     uint16_t msg_type = reader.read_u16_le().value_or(0);
     uint32_t req_id = reader.read_u32_le().value_or(0);
@@ -36,4 +36,4 @@ OwnedBuffer RpcChannel::process_incoming_raw(Span<const byte_t> wire_data) {
     return OwnedBuffer();
 }
 
-} // namespace vde
+}

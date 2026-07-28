@@ -35,7 +35,7 @@ Status SortMergeJoinOperator::open() {
         sorted_right_.push_back(std::move(res.value));
     }
 
-    // Sort both relations by join key
+
     uint16_t lidx = left_key_idx_;
     std::sort(sorted_left_.begin(), sorted_left_.end(),
         [lidx](const Record& a, const Record& b) {
@@ -88,4 +88,4 @@ void SortMergeJoinOperator::close() {
     if (right_child_) right_child_->close();
 }
 
-} // namespace vde
+}

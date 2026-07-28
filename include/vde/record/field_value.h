@@ -63,4 +63,4 @@ private:
     } data_;
 };
 
-} // namespace vde
+}

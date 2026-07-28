@@ -30,4 +30,4 @@ private:
     QueryEvaluator evaluator_;
 };
 
-} // namespace vde
+}

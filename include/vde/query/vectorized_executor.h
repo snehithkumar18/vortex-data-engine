@@ -30,4 +30,4 @@ private:
     uint32_t target_val_;
 };
 
-} // namespace vde
+}

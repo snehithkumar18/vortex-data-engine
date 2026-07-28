@@ -29,8 +29,8 @@ void HuffmanCodec::prune_zero_freq(HuffmanNode* node) {
 
     if (node->left && node->left->freq == 0) {
         if (prune_cb_) {
-            // Bug 8: Reentrancy Callback UAF.
-            // The callback can modify the node_pool_ or delete nodes while iteration continues.
+
+
             prune_cb_(node->left);
         }
         delete node->left;
@@ -54,8 +54,8 @@ Status HuffmanCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
     if (input.empty()) return Status::Ok;
 
     ByteReader reader(input);
-    
-    // Read 256 symbol frequencies
+
+
     if (!freq_table_) {
         freq_table_ = static_cast<uint32_t*>(std::malloc(256 * sizeof(uint32_t)));
     }
@@ -65,7 +65,7 @@ Status HuffmanCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
         freq_table_[i] = f.value;
     }
 
-    // Build trivial tree
+
     root_ = new HuffmanNode();
     for (int i = 0; i < 256; ++i) {
         if (freq_table_[i] > 0) {
@@ -79,10 +79,10 @@ Status HuffmanCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
         }
     }
 
-    // Prune pass
+
     prune_zero_freq(root_);
 
-    // Decode bitstream
+
     output->clear();
     while (reader.remaining() > 0) {
         auto b = reader.read_u8();
@@ -107,9 +107,8 @@ Status HuffmanCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     }
 
     if (input.size() > kMaxRecordSize) {
-        // Bug 9: Double-free on failure path.
-        // Memory is freed here, but freq_table_ pointer is NOT set to nullptr.
-        // Destructor will attempt std::free(freq_table_) again.
+
+
         std::free(freq_table_);
         return Status::Overflow;
     }
@@ -124,4 +123,4 @@ Status HuffmanCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

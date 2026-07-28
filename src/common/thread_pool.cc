@@ -40,4 +40,4 @@ void ThreadPool::stop() {
     workers_.clear();
 }
 
-} // namespace vde
+}

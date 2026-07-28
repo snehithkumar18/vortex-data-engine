@@ -43,4 +43,4 @@ const FieldDef* Schema::find_field(uint16_t id) const {
     return nullptr;
 }
 
-} // namespace vde
+}

@@ -35,4 +35,4 @@ bool ProjectionPruningRule::apply(SelectQueryNode* node) {
     return true;
 }
 
-} // namespace vde
+}

@@ -127,4 +127,4 @@ double SimpleRandom::next_double() {
     return static_cast<double>(next_u64() >> 11) * (1.0 / 9007199254740992.0);
 }
 
-} // namespace vde
+}

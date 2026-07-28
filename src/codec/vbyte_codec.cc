@@ -35,4 +35,4 @@ Status VByteCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

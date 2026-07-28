@@ -41,4 +41,4 @@ private:
     uint32_t next_sstable_id_ = 1;
 };
 
-} // namespace vde
+}

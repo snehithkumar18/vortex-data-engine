@@ -47,4 +47,4 @@ private:
     uint64_t last_applied_ = 0;
 };
 
-} // namespace vde
+}

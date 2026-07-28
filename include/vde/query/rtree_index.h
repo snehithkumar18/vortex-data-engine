@@ -50,4 +50,4 @@ private:
     size_t total_items_ = 0;
 };
 
-} // namespace vde
+}

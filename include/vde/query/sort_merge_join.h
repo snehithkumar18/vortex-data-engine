@@ -29,4 +29,4 @@ private:
     size_t right_pos_ = 0;
 };
 
-} // namespace vde
+}

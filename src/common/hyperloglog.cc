@@ -65,4 +65,4 @@ void HyperLogLog::merge(const HyperLogLog& other) {
     }
 }
 
-} // namespace vde
+}

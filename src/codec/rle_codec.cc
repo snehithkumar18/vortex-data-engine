@@ -9,8 +9,8 @@ Status RleCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
     ByteReader reader(input);
 
     uint64_t total_output_len = 0;
-    
-    // Pre-scan to calculate required buffer length
+
+
     ByteReader scan_reader(input);
     while (scan_reader.remaining() > 0) {
         auto run_res = scan_reader.read_vlq();
@@ -21,8 +21,7 @@ Status RleCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
         uint64_t run_count = run_res.value;
         uint64_t val_len = val_len_res.value;
 
-        // Bug 7: VLQ arithmetic multiplication overflow.
-        // run_count * val_len can overflow uint64_t, yielding a small total_output_len.
+
         total_output_len += (run_count * val_len);
 
         scan_reader.skip(val_len);
@@ -79,4 +78,4 @@ Status RleCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

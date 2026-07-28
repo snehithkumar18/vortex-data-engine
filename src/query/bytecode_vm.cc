@@ -92,4 +92,4 @@ bool BytecodeVM::execute(const std::vector<Instruction>& code, const Record& rec
     return false;
 }
 
-} // namespace vde
+}

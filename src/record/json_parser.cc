@@ -21,4 +21,4 @@ Result<RecordBatch> JsonRecordParser::parse_batch(std::string_view json_str) {
     return Result<RecordBatch>::ok(std::move(batch));
 }
 
-} // namespace vde
+}

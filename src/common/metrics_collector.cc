@@ -38,4 +38,4 @@ void MetricsCollector::reset() {
     cache_misses_ = 0;
 }
 
-} // namespace vde
+}

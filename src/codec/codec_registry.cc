@@ -14,8 +14,8 @@ static ICodec* create_huffman() { return new HuffmanCodec(); }
 static ICodec* create_bitpack() { return new BitpackCodec(); }
 
 std::unique_ptr<ICodec> create_codec(uint16_t codec_id) {
-    // Bug 11: Thread-safety copy using an uninitialized local array.
-    // Sparse initialization leaves indices 5, 6, 7 pointing to uninitialized stack memory, causing bad function pointer calls / type confusion.
+
+
     void* local_factories[8];
     local_factories[1] = reinterpret_cast<void*>(create_rle);
     local_factories[2] = reinterpret_cast<void*>(create_delta);
@@ -31,4 +31,4 @@ std::unique_ptr<ICodec> create_codec(uint16_t codec_id) {
     return std::unique_ptr<ICodec>(fn());
 }
 
-} // namespace vde
+}

@@ -50,4 +50,4 @@ std::vector<uint32_t> ClusterMembershipManager::alive_nodes() const {
     return res;
 }
 
-} // namespace vde
+}

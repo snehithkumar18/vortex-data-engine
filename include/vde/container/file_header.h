@@ -17,13 +17,13 @@ struct FileHeader {
     uint8_t reserved[8];
 };
 
-// Parse a file header from the current reader position.
+
 Status parse_file_header(ByteReader& reader, FileHeader* out);
 
-// Validate header fields (magic, version, checksum).
+
 Status validate_file_header(const FileHeader& header, Span<const byte_t> raw_header_bytes);
 
-// Check whether the given version is compatible with this library.
+
 bool is_version_compatible(uint8_t major, uint8_t minor);
 
-} // namespace vde
+}

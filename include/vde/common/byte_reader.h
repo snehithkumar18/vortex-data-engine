@@ -45,4 +45,4 @@ private:
     size_t pos_;
 };
 
-} // namespace vde
+}

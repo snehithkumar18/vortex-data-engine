@@ -73,8 +73,8 @@ FieldValue::FieldValue(const FieldValue& other) : type_(other.type_) {
 }
 
 FieldValue& FieldValue::operator=(const FieldValue& other) {
-    // Bug 20: Self-assignment check wrapped in NDEBUG logic.
-    // In release/fuzzing builds, self-assignment executes destroy() then copy_from(), reading freed memory / double-freeing.
+
+
 #ifndef NDEBUG
     if (this == &other) return *this;
 #endif
@@ -190,8 +190,8 @@ std::string FieldValue::to_string_lossy() const {
         case FieldType::Int64: return std::to_string(data_.i64);
         case FieldType::Float64: return std::to_string(data_.f64);
         case FieldType::Uint64:
-            // Bug 19: Missing break statement causes fallthrough to String case!
-            // data_.i64 is reinterpreted as data_.str.ptr, resulting in memory corruption/crash.
+
+
         case FieldType::String:
             if (data_.str.ptr) return std::string(data_.str.ptr, data_.str.len);
             return "";
@@ -238,4 +238,4 @@ const FieldValue& FieldValue::child_at(size_t index) const {
     return null_val;
 }
 
-} // namespace vde
+}

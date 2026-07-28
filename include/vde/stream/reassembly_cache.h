@@ -32,4 +32,4 @@ private:
     uint64_t access_counter_ = 0;
 };
 
-} // namespace vde
+}

@@ -20,7 +20,7 @@ int ExtentAllocator::allocate_extent() {
             return static_cast<int>(i);
         }
     }
-    return -1; // Out of extents
+    return -1;
 }
 
 Status ExtentAllocator::free_extent(uint32_t extent_id) {
@@ -48,4 +48,4 @@ uint32_t ExtentAllocator::allocate_page_in_extent(uint32_t extent_id) {
     return allocated_page;
 }
 
-} // namespace vde
+}

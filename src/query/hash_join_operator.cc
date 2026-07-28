@@ -17,7 +17,7 @@ Status HashJoinOperator::open() {
     Status st = left_child_->open();
     if (st != Status::Ok) return st;
 
-    // Build hash table from left relation
+
     while (true) {
         auto res = left_child_->next();
         if (!res.has_value()) break;
@@ -34,7 +34,7 @@ Status HashJoinOperator::open() {
 Result<Record> HashJoinOperator::next() {
     while (true) {
         auto res = right_child_->next();
-        if (!res.has_value()) return res; // Eof or error
+        if (!res.has_value()) return res;
 
         uint32_t right_key = 0;
         if (right_key_idx_ < res.value.fields.size()) {
@@ -59,4 +59,4 @@ void HashJoinOperator::close() {
     if (right_child_) right_child_->close();
 }
 
-} // namespace vde
+}

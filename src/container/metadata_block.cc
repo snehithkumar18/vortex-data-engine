@@ -101,9 +101,8 @@ Status MetadataNode::parse(ByteReader& reader) {
         if (st != Status::Ok) return st;
 
         if (key == kMetadataInheritKey && parent_) {
-            // Inherit entries from parent node.
-            // Bidirectional synchronization: pushes child's entries back to parent's entries_.
-            // If parent's entries_ vector reallocates here, any reference/pointer held by callers is invalidated.
+
+
             inherit_parent_entries();
         } else {
             entries_.push_back({key, std::move(val)});
@@ -176,7 +175,7 @@ Status MetadataNode::parse_value(ByteReader& reader, MetadataValue* out) {
             auto child = std::make_unique<MetadataNode>();
             child->parent_ = this;
 
-            // Deep recursive call without depth tracking -> potential Stack Overflow (Bug 5)
+
             Status st = child->parse(reader);
             if (st != Status::Ok) return st;
 
@@ -194,7 +193,7 @@ void MetadataNode::inherit_parent_entries() {
     if (!parent_) return;
     for (const auto& entry : parent_->entries_) {
         entries_.push_back(entry);
-        // Bug 1: Push back to parent's entries vector during recursive parse
+
         parent_->entries_.push_back(entry);
     }
 }
@@ -206,4 +205,4 @@ const MetadataEntry* MetadataNode::find(uint16_t key_id) const {
     return nullptr;
 }
 
-} // namespace vde
+}

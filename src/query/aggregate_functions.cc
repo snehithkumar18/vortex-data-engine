@@ -27,7 +27,7 @@ void AggregateFunction::update(const Record& record) {
         if (num < min_val_) min_val_ = num;
         if (num > max_val_) max_val_ = num;
 
-        // Welford's variance calculation
+
         double delta = num - (sum_ / count_);
         double mean_new = sum_ / count_;
         double delta2 = num - mean_new;
@@ -56,4 +56,4 @@ FieldValue AggregateFunction::result() const {
     return FieldValue();
 }
 
-} // namespace vde
+}

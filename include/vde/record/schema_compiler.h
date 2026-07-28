@@ -13,4 +13,4 @@ public:
     std::string serialize_to_json(const Schema& schema);
 };
 
-} // namespace vde
+}

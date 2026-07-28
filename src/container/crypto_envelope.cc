@@ -9,7 +9,7 @@ Status CryptoEnvelopeParser::parse_envelope(Span<const byte_t> input, CryptoEnve
 
     ByteReader reader(input);
     auto magic_res = reader.read_u32_le();
-    if (!magic_res.has_value() || magic_res.value != 0x43584456) return Status::Corrupt; // "VDXC"
+    if (!magic_res.has_value() || magic_res.value != 0x43584456) return Status::Corrupt;
 
     out_hdr->magic = magic_res.value;
     out_hdr->cipher_id = reader.read_u16_le().value_or(0);
@@ -31,4 +31,4 @@ Status CryptoEnvelopeParser::parse_envelope(Span<const byte_t> input, CryptoEnve
     return Status::Ok;
 }
 
-} // namespace vde
+}

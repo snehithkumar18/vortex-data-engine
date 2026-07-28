@@ -78,4 +78,4 @@ void free_expression(ExprNode* root) {
     delete root;
 }
 
-} // namespace vde
+}

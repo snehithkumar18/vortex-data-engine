@@ -28,4 +28,4 @@ Status ParallelPipeline::process_batch(const std::vector<Span<const byte_t>>& vd
     return Status::Ok;
 }
 
-} // namespace vde
+}

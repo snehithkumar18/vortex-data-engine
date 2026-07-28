@@ -26,4 +26,4 @@ private:
     AnsSymbolTable table_{};
 };
 
-} // namespace vde
+}

@@ -16,4 +16,4 @@ public:
     uint16_t id() const override { return static_cast<uint16_t>(CodecId::Rle); }
 };
 
-} // namespace vde
+}

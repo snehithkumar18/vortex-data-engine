@@ -38,4 +38,4 @@ private:
     SectionHandler handlers_[5] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 };
 
-} // namespace vde
+}

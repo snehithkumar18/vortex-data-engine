@@ -108,4 +108,4 @@ public:
     virtual void visit(SelectQueryNode* node) = 0;
 };
 
-} // namespace vde
+}

@@ -20,7 +20,7 @@ Status ContainerReader::open(Span<const byte_t> data) {
     st = validate_file_header(header_, data.subspan(0, kFileHeaderSize));
     if (st != Status::Ok) {
         if (st == Status::Unsupported && header_.version_major == kFormatVersionMajor && header_.version_minor > kFormatVersionMinor) {
-            // Version rollback attempt
+
             return compatibility_rollback();
         }
         return st;
@@ -29,7 +29,7 @@ Status ContainerReader::open(Span<const byte_t> data) {
     st = sections_.parse(reader, header_.section_count);
     if (st != Status::Ok) return st;
 
-    // Initialize handler table
+
     handlers_[0] = dummy_records_handler;
     handlers_[1] = dummy_compressed_handler;
     handlers_[2] = dummy_index_handler;
@@ -40,15 +40,15 @@ Status ContainerReader::open(Span<const byte_t> data) {
 }
 
 Status ContainerReader::compatibility_rollback() {
-    // Bug 2: Re-parse section table with v1.0 parameters after failure.
-    // The previous entries vector was not properly cleared, leading to dangling/duplicate items during rollback re-parse.
+
+
     ByteReader reader(data_);
     reader.skip(kFileHeaderSize);
-    
-    // Partial reset without clearing metadata nodes
+
+
     Status st = sections_.parse(reader, header_.section_count);
     if (st != Status::Ok) {
-        // Rollback failure path leaves partially constructed/duplicated section entries
+
         return st;
     }
     return Status::Ok;
@@ -86,8 +86,7 @@ Status ContainerReader::dispatch_section(size_t index, void* context) {
 
     uint16_t type_idx = static_cast<uint16_t>(entry.type);
 
-    // Bug 6: Type confusion & OOB read via unchecked handlers_ array lookup.
-    // If type_idx > 4, reads past handlers_ array and invokes invalid function pointer.
+
     SectionHandler handler = handlers_[type_idx];
     if (!handler) return Status::Unsupported;
 
@@ -95,4 +94,4 @@ Status ContainerReader::dispatch_section(size_t index, void* context) {
     return handler(sdata, context);
 }
 
-} // namespace vde
+}

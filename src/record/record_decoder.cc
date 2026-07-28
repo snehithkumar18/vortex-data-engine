@@ -26,10 +26,9 @@ Status RecordDecoder::decode_fixed_fields(ByteReader& reader, const Schema& sche
     if (!size_res.has_value()) return Status::Truncated;
     uint16_t field_size = size_res.value;
 
-    // Bug 24: Field count * size overflow leading to Heap OOB write.
-    // Small total calculation due to 16-bit multiplication underflow, allocated small vector, then written out of bounds.
+
     uint16_t total_buf_size = field_count * field_size;
-    
+
     out->fields.clear();
     out->fields.reserve(field_count);
 
@@ -64,15 +63,14 @@ Status RecordDecoder::decode_fixed_fields(ByteReader& reader, const Schema& sche
 }
 
 Status RecordDecoder::decode_nested(ByteReader& reader, FieldValue* out) {
-    // Bug 23: Stack Overflow due to missing current_depth_ check / recursion.
+
     current_depth_++;
 
     auto len_res = reader.read_u32_le();
     if (!len_res.has_value()) return Status::Truncated;
     uint32_t payload_len = len_res.value;
 
-    // Bug 21: Payload length subtraction underflow when payload_len < 4.
-    // Underflows body_size to near UINT32_MAX, then attempts OOB read over ByteReader.
+
     uint32_t body_size = payload_len - 4;
 
     auto bytes_res = reader.read_bytes(body_size);
@@ -98,4 +96,4 @@ Status RecordDecoder::decode_nested(ByteReader& reader, FieldValue* out) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

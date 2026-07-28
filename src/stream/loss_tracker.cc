@@ -35,4 +35,4 @@ std::vector<uint32_t> LossTracker::detect_missing_sequences() const {
     return missing;
 }
 
-} // namespace vde
+}

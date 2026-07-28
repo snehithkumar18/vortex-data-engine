@@ -41,4 +41,4 @@ private:
     std::vector<std::unique_ptr<OptimizerRule>> rules_;
 };
 
-} // namespace vde
+}

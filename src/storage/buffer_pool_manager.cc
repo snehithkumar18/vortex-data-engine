@@ -27,7 +27,7 @@ SlottedPage* BufferPoolManager::new_page(uint32_t* out_page_id) {
         }
     }
 
-    if (target_frame == frames_.size()) return nullptr; // Pool fully pinned
+    if (target_frame == frames_.size()) return nullptr;
 
     uint32_t pid = next_page_id_++;
     if (out_page_id) *out_page_id = pid;
@@ -64,4 +64,4 @@ bool BufferPoolManager::flush_page(uint32_t page_id) {
     return true;
 }
 
-} // namespace vde
+}

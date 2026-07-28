@@ -5,20 +5,20 @@
 #include <vector>
 #include <functional>
 
-struct TestCase { 
-    std::string name; 
-    std::function<void()> func; 
+struct TestCase {
+    std::string name;
+    std::function<void()> func;
 };
 
-inline std::vector<TestCase>& test_registry() { 
-    static std::vector<TestCase> r; 
-    return r; 
+inline std::vector<TestCase>& test_registry() {
+    static std::vector<TestCase> r;
+    return r;
 }
 
-struct TestRegistrar { 
-    TestRegistrar(const char* n, std::function<void()> f) { 
-        test_registry().push_back({n, f}); 
-    } 
+struct TestRegistrar {
+    TestRegistrar(const char* n, std::function<void()> f) {
+        test_registry().push_back({n, f});
+    }
 };
 
 #define TEST(name) \

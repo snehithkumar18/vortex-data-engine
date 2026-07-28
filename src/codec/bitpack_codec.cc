@@ -18,11 +18,10 @@ Status BitpackCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
     size_t value_count = (payload_bytes * 8) / bit_width;
 
     output->clear();
-    // Allocate space based on division formula
+
     output->reserve(value_count * sizeof(uint32_t));
 
-    // Bug 10: Discrepancy between division-based allocation formula and shift-based iteration total_values formula.
-    // Shift formula evaluates total_values larger than value_count when bit_width is not a power of 2, leading to Heap OOB write.
+
     size_t total_values = (payload_bytes << 3) >> (bit_width > 4 ? 3 : 2);
 
     for (size_t i = 0; i < total_values; ++i) {
@@ -40,11 +39,11 @@ Status BitpackCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     output->clear();
 
     ByteWriter writer;
-    writer.write_u8(8); // Default 8-bit width
+    writer.write_u8(8);
     writer.write_bytes(input);
 
     *output = writer.release();
     return Status::Ok;
 }
 
-} // namespace vde
+}

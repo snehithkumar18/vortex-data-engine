@@ -16,4 +16,4 @@ public:
     uint16_t id() const override { return 5; }
 };
 
-} // namespace vde
+}

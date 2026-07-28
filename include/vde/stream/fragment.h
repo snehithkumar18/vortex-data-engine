@@ -34,4 +34,4 @@ struct Fragment {
 
 Status parse_fragment(ByteReader& reader, Fragment* out);
 
-} // namespace vde
+}

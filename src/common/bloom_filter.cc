@@ -41,4 +41,4 @@ bool BloomFilter::possibly_contains(Span<const byte_t> data) const {
     return true;
 }
 
-} // namespace vde
+}

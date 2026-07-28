@@ -75,4 +75,4 @@ std::unique_ptr<PhysicalOperator> QueryPlanner::create_plan(const SelectStatemen
     return plan;
 }
 
-} // namespace vde
+}

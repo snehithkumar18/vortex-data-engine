@@ -42,4 +42,4 @@ private:
     std::unordered_map<uint32_t, RecordBatch> partition_data_;
 };
 
-} // namespace vde
+}

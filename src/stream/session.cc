@@ -37,8 +37,7 @@ Status Session::add_fragment(const Fragment& frag) {
         base_sequence_ = frag.sequence_num;
     }
 
-    // Bug 18: Unsigned sequence rollover subtraction indexing OOB read.
-    // When frag.sequence_num < base_sequence_, rel_seq underflows to huge value.
+
     uint32_t rel_seq = frag.sequence_num - base_sequence_;
 
     if (has_flag(frag.flags, FragmentFlags::First)) has_first_ = true;
@@ -49,8 +48,8 @@ Status Session::add_fragment(const Fragment& frag) {
     stored.size = frag.payload.size();
 
     if (has_flag(frag.flags, FragmentFlags::Retransmit)) {
-        // Bug 13: Stale fragment raw pointer optimization.
-        // Stores raw pointer to transient payload buffer without copying, causing UAF when finalize() reads stored.data.
+
+
         stored.data = const_cast<byte_t*>(frag.payload.data());
         stored.owns_data = false;
     } else {
@@ -61,7 +60,7 @@ Status Session::add_fragment(const Fragment& frag) {
 
     total_size_ += stored.size;
 
-    // Bug 18 triggered if indexing uses rel_seq past vector bounds
+
     if (rel_seq < 1000) {
         if (rel_seq >= fragments_.size()) {
             fragments_.resize(rel_seq + 1);
@@ -93,8 +92,8 @@ Result<OwnedBuffer> Session::finalize() {
         if (!frag.data) continue;
 
         if (frag.seq > expected_seq) {
-            // Bug 15: Gap fill offset calculation underflow/overflow.
-            // Calculates huge memset size for large sequence gaps, resulting in Heap OOB write.
+
+
             size_t gap_count = frag.seq - expected_seq;
             size_t gap_bytes = gap_count * 128;
             if (offset + gap_bytes < total_size_) {
@@ -104,7 +103,7 @@ Result<OwnedBuffer> Session::finalize() {
         }
 
         if (offset + frag.size <= total_size_) {
-            // Reads from frag.data (UAF if Bug 13 active)
+
             std::memcpy(output.data() + offset, frag.data, frag.size);
             offset += frag.size;
         }
@@ -115,4 +114,4 @@ Result<OwnedBuffer> Session::finalize() {
     return Result<OwnedBuffer>::ok(std::move(output));
 }
 
-} // namespace vde
+}

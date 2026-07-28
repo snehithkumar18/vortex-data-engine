@@ -100,4 +100,4 @@ bool SkipList::remove(uint32_t key) {
     return true;
 }
 
-} // namespace vde
+}

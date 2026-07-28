@@ -39,4 +39,4 @@ private:
     size_t total_size_ = 0;
 };
 
-} // namespace vde
+}

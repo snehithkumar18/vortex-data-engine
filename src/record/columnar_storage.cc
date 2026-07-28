@@ -34,4 +34,4 @@ ColumnarBatch ColumnarBatch::from_record_batch(const RecordBatch& batch) {
     return cbatch;
 }
 
-} // namespace vde
+}

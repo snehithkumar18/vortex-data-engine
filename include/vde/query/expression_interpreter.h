@@ -13,4 +13,4 @@ public:
     std::vector<bool> evaluate_batch(const ExprNode* node, const RecordBatch& batch);
 };
 
-} // namespace vde
+}

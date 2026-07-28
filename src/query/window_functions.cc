@@ -18,4 +18,4 @@ std::vector<uint32_t> WindowFunctionEvaluator::evaluate(const RecordBatch& batch
     return ranks;
 }
 
-} // namespace vde
+}

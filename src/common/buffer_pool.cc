@@ -98,4 +98,4 @@ size_t RingBuffer::read(byte_t* dest, size_t len) {
     return to_read;
 }
 
-} // namespace vde
+}

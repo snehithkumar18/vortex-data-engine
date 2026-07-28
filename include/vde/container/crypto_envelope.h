@@ -5,7 +5,7 @@
 namespace vde {
 
 struct CryptoEnvelopeHeader {
-    uint32_t magic; // "VDXC"
+    uint32_t magic;
     uint16_t cipher_id;
     uint8_t iv[16];
     uint8_t tag[16];
@@ -19,4 +19,4 @@ public:
     Status parse_envelope(Span<const byte_t> input, CryptoEnvelopeHeader* out_hdr, Span<const byte_t>* out_payload);
 };
 
-} // namespace vde
+}

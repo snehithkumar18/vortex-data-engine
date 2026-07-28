@@ -142,7 +142,7 @@ private:
     std::vector<byte_t> storage_;
 };
 
-// Mutable span specialization
+
 template <>
 struct Span<byte_t> {
     Span() : data_(nullptr), size_(0) {}
@@ -167,7 +167,7 @@ private:
     size_t size_;
 };
 
-// Format constants
+
 static constexpr byte_t kMagicBytes[4] = { 'V', 'D', 'X', 0x01 };
 static constexpr uint8_t kFormatVersionMajor = 1;
 static constexpr uint8_t kFormatVersionMinor = 2;
@@ -180,4 +180,4 @@ static constexpr size_t kMaxNestingDepth = 64;
 static constexpr size_t kMaxDecompressedSize = 64 * 1024 * 1024;
 static constexpr uint16_t kMetadataInheritKey = 0xFFFF;
 
-} // namespace vde
+}

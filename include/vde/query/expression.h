@@ -57,4 +57,4 @@ private:
 Status parse_expression(ByteReader& reader, ExprNode** out_root);
 void free_expression(ExprNode* root);
 
-} // namespace vde
+}

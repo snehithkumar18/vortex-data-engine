@@ -52,4 +52,4 @@ std::vector<size_t> HashIndex::lookup(uint32_t key) const {
     return results;
 }
 
-} // namespace vde
+}

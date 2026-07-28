@@ -15,11 +15,11 @@ Status ConfigLoader::parse_string(std::string_view text) {
             std::string key = line.substr(0, eq_pos);
             std::string val = line.substr(eq_pos + 1);
 
-            // Trim key
+
             key.erase(0, key.find_first_not_of(" \t"));
             key.erase(key.find_last_not_of(" \t") + 1);
 
-            // Trim val
+
             val.erase(0, val.find_first_not_of(" \t"));
             val.erase(val.find_last_not_of(" \t") + 1);
 
@@ -59,4 +59,4 @@ bool ConfigLoader::has_key(const std::string& key) const {
     return entries_.find(key) != entries_.end();
 }
 
-} // namespace vde
+}

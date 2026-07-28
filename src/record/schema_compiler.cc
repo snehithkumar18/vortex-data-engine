@@ -7,10 +7,10 @@ Result<Schema> SchemaCompiler::compile_from_json(std::string_view json_text) {
     (void)json_text;
     Schema schema;
     ByteWriter writer;
-    writer.write_u16_le(1); // 1 field
-    writer.write_u16_le(0); // id 0
-    writer.write_u8(1); // Uint32
-    writer.write_u16_le(0); // flags
+    writer.write_u16_le(1);
+    writer.write_u16_le(0);
+    writer.write_u8(1);
+    writer.write_u16_le(0);
     writer.write_bytes(Span<const byte_t>(reinterpret_cast<const byte_t*>("id\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"), 64));
 
     OwnedBuffer buf = writer.release();
@@ -25,4 +25,4 @@ std::string SchemaCompiler::serialize_to_json(const Schema& schema) {
     return json;
 }
 
-} // namespace vde
+}

@@ -24,4 +24,4 @@ private:
     std::vector<Fragment> window_;
 };
 
-} // namespace vde
+}

@@ -8,14 +8,14 @@
 namespace vde {
 
 static constexpr size_t kPageSize = 4096;
-static constexpr uint32_t kSlottedPageMagic = 0x56445350; // "VDSP"
+static constexpr uint32_t kSlottedPageMagic = 0x56445350;
 
 struct PageHeader {
     uint32_t magic;
     uint32_t page_id;
     uint16_t slot_count;
-    uint16_t free_space_pointer; // Points to lower boundary of unallocated tuple storage
-    uint32_t lsn; // Log sequence number
+    uint16_t free_space_pointer;
+    uint32_t lsn;
 };
 
 struct Slot {
@@ -35,7 +35,7 @@ public:
 
     uint16_t free_space() const;
     uint32_t page_id() const { return header_->page_id; }
-    
+
     byte_t* raw_data() { return data_; }
     const byte_t* raw_data() const { return data_; }
 
@@ -45,4 +45,4 @@ private:
     Slot* slots_;
 };
 
-} // namespace vde
+}

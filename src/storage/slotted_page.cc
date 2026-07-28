@@ -32,7 +32,7 @@ uint16_t SlottedPage::free_space() const {
 
 int SlottedPage::insert_tuple(Span<const byte_t> tuple_data) {
     uint16_t needed = static_cast<uint16_t>(sizeof(Slot) + tuple_data.size());
-    if (free_space() < needed) return -1; // Page full
+    if (free_space() < needed) return -1;
 
     uint16_t new_offset = header_->free_space_pointer - static_cast<uint16_t>(tuple_data.size());
     header_->free_space_pointer = new_offset;
@@ -49,7 +49,7 @@ int SlottedPage::insert_tuple(Span<const byte_t> tuple_data) {
 Status SlottedPage::get_tuple(uint16_t slot_id, OwnedBuffer* out_tuple) const {
     if (slot_id >= header_->slot_count || !out_tuple) return Status::InvalidArgument;
     const Slot& slot = slots_[slot_id];
-    if (slot.length == 0) return Status::NotFound; // Deleted tuple
+    if (slot.length == 0) return Status::NotFound;
 
     out_tuple->clear();
     out_tuple->append(data_ + slot.offset, slot.length);
@@ -62,4 +62,4 @@ Status SlottedPage::delete_tuple(uint16_t slot_id) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

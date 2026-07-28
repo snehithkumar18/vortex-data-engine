@@ -9,7 +9,7 @@ Catalog& Catalog::instance() {
 
 Status Catalog::create_table(const std::string& name, Schema schema) {
     if (tables_.find(name) != tables_.end()) {
-        return Status::Error; // Table already exists
+        return Status::Error;
     }
     tables_[name] = std::make_unique<TableDescriptor>(name, std::move(schema));
     return Status::Ok;
@@ -72,4 +72,4 @@ void Catalog::clear() {
     indexes_.clear();
 }
 
-} // namespace vde
+}

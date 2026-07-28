@@ -147,4 +147,4 @@ Result<std::unique_ptr<SelectStatement>> SqlParser::parse_select() {
     return Result<std::unique_ptr<SelectStatement>>::ok(std::move(stmt));
 }
 
-} // namespace vde
+}

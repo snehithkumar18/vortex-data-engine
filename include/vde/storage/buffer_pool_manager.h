@@ -34,4 +34,4 @@ private:
     std::list<size_t> lru_list_;
 };
 
-} // namespace vde
+}

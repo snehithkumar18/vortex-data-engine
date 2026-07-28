@@ -53,4 +53,4 @@ private:
     std::vector<FieldValue> stack_;
 };
 
-} // namespace vde
+}

@@ -25,4 +25,4 @@ private:
     CompletionCallback completion_cb_;
 };
 
-} // namespace vde
+}

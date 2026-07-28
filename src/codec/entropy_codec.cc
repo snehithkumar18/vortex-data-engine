@@ -16,14 +16,14 @@ Status EntropyCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
 
     output->reserve(uncompressed_len.value);
 
-    // Read symbol frequency table
+
     for (int i = 0; i < 256; ++i) {
         auto f = reader.read_u8();
         if (!f.has_value()) return Status::Truncated;
         table_.freq[i] = f.value;
     }
 
-    // ANS decoding state machine
+
     while (reader.remaining() > 0 && output->size() < uncompressed_len.value) {
         auto b = reader.read_u8();
         if (!b.has_value()) break;
@@ -41,7 +41,7 @@ Status EntropyCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     ByteWriter writer;
     writer.write_u32_le(static_cast<uint32_t>(input.size()));
 
-    std::memset(table_.freq, 1, sizeof(table_.freq)); // Uniform table
+    std::memset(table_.freq, 1, sizeof(table_.freq));
     for (int i = 0; i < 256; ++i) {
         writer.write_u8(static_cast<uint8_t>(table_.freq[i]));
     }
@@ -51,4 +51,4 @@ Status EntropyCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

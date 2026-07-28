@@ -25,4 +25,4 @@ private:
     bool is_compacted_ = false;
 };
 
-} // namespace vde
+}

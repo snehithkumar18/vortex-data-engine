@@ -54,4 +54,4 @@ private:
     size_t row_count_ = 0;
 };
 
-} // namespace vde
+}

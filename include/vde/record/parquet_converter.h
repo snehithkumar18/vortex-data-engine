@@ -12,4 +12,4 @@ public:
     Result<ColumnarBatch> read_parquet(Span<const byte_t> parquet_bytes);
 };
 
-} // namespace vde
+}

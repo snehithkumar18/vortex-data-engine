@@ -23,4 +23,4 @@ public:
     static Status export_column(const ColumnVector& col, ArrowArrayBridge* out_array, ArrowSchemaBridge* out_schema);
 };
 
-} // namespace vde
+}

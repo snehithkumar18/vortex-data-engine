@@ -22,7 +22,7 @@ public:
     virtual uint16_t id() const = 0;
 };
 
-// Factory function to instantiate codec by ID
+
 std::unique_ptr<ICodec> create_codec(uint16_t codec_id);
 
-} // namespace vde
+}

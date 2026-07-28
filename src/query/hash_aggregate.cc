@@ -63,4 +63,4 @@ void HashAggregateOperator::close() {
     if (child_) child_->close();
 }
 
-} // namespace vde
+}

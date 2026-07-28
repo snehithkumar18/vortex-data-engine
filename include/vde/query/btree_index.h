@@ -34,4 +34,4 @@ private:
     size_t total_keys_ = 0;
 };
 
-} // namespace vde
+}

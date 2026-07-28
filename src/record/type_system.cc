@@ -21,4 +21,4 @@ std::string TypeSystemConverter::uuid_to_string(const UuidVal& uuid) {
     return std::string(buf);
 }
 
-} // namespace vde
+}

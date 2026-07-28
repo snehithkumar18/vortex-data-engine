@@ -9,16 +9,16 @@
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     if (size < 8) return 0;
-    
+
     vde::Span<const vde::byte_t> input(data, size);
-    
-    // Level 1: Expression AST parsing & evaluation (Bugs 25, 28, 29)
+
+
     vde::ExprNode* root = nullptr;
     {
         vde::ByteReader br(input);
         vde::parse_expression(br, &root);
     }
-    
+
     if (root) {
         vde::Record record;
         record.id = 1;
@@ -34,19 +34,19 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                 }
             }
         }
-        
+
         vde::QueryEvaluator evaluator;
         evaluator.evaluate(root, record);
-        
+
         vde::RecordBatch batch;
         batch.add_record(std::move(record));
         std::vector<size_t> matches;
         evaluator.filter(root, batch, &matches);
-        
+
         vde::free_expression(root);
     }
-    
-    // Level 2: SortedIndex build and lookup (Bugs 26, 30)
+
+
     {
         vde::RecordBatch batch;
         vde::ByteReader br3(input);
@@ -69,8 +69,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
             }
         }
     }
-    
-    // Level 3: TransactionCache rollback ownership handling (Bug 27)
+
+
     {
         vde::TransactionCache cache;
         cache.begin();
@@ -90,6 +90,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
             cache.rollback();
         }
     }
-    
+
     return 0;
 }

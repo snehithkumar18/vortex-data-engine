@@ -6,13 +6,13 @@
 TEST(file_header_parse_validate) {
     vde::ByteWriter writer;
     writer.write_bytes(vde::kMagicBytes, 4);
-    writer.write_u8(1); // Major
-    writer.write_u8(2); // Minor
-    writer.write_u16_le(0); // Flags
-    writer.write_u32_le(2); // Section count
-    writer.write_u64_le(1024); // Total size
-    writer.write_u32_le(0x12345678); // Checksum dummy
-    writer.write_zeros(8); // Reserved
+    writer.write_u8(1);
+    writer.write_u8(2);
+    writer.write_u16_le(0);
+    writer.write_u32_le(2);
+    writer.write_u64_le(1024);
+    writer.write_u32_le(0x12345678);
+    writer.write_zeros(8);
 
     vde::OwnedBuffer buf = writer.release();
     vde::ByteReader reader(buf.span());

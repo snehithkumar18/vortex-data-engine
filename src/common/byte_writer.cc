@@ -76,4 +76,4 @@ OwnedBuffer ByteWriter::release() {
     return OwnedBuffer(std::move(buffer_));
 }
 
-} // namespace vde
+}

@@ -33,4 +33,4 @@ private:
     std::vector<ComplexStructField> fields_;
 };
 
-} // namespace vde
+}

@@ -84,4 +84,4 @@ void BTreeIndex::search_recursive(const BTreeNode* node, uint32_t key, std::vect
     }
 }
 
-} // namespace vde
+}

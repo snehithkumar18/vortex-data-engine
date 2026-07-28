@@ -41,4 +41,4 @@ private:
     uint64_t cache_misses_ = 0;
 };
 
-} // namespace vde
+}

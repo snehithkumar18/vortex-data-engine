@@ -35,4 +35,4 @@ Status parse_fragment(ByteReader& reader, Fragment* out) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

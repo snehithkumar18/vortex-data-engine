@@ -10,7 +10,7 @@ TEST(lru_cache_put_get) {
     ASSERT_TRUE(cache.get(1, &v));
     ASSERT_EQ(v, 100u);
 
-    cache.put(3, 300); // Evicts key 2
+    cache.put(3, 300);
     ASSERT_FALSE(cache.get(2, &v));
 }
 

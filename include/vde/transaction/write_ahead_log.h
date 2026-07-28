@@ -41,4 +41,4 @@ private:
     std::vector<LogRecord> log_records_;
 };
 
-} // namespace vde
+}

@@ -28,4 +28,4 @@ private:
     std::vector<uint8_t> registers_;
 };
 
-} // namespace vde
+}

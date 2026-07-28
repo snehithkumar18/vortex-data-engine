@@ -14,4 +14,4 @@ void VdeServerDaemon::stop() {
     running_ = false;
 }
 
-} // namespace vde
+}

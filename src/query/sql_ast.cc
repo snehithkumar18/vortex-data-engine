@@ -35,4 +35,4 @@ void SelectQueryNode::set_where_clause(std::unique_ptr<SqlAstNode> where) {
     where_clause_ = std::move(where);
 }
 
-} // namespace vde
+}

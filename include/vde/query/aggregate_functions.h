@@ -31,7 +31,7 @@ private:
     double sum_ = 0.0;
     double min_val_ = 1e300;
     double max_val_ = -1e300;
-    double M2_ = 0.0; // Welford's algorithm variance tracker
+    double M2_ = 0.0;
 };
 
-} // namespace vde
+}

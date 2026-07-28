@@ -136,4 +136,4 @@ Result<uint64_t> ByteReader::read_vlq() {
     return Result<uint64_t>(result);
 }
 
-} // namespace vde
+}

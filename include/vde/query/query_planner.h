@@ -60,4 +60,4 @@ public:
     std::unique_ptr<PhysicalOperator> create_plan(const SelectStatement& stmt, const RecordBatch* batch);
 };
 
-} // namespace vde
+}

@@ -7,7 +7,7 @@ namespace vde {
 
 OwnedBuffer PacketSerializer::serialize_packet(const WirePacketHeader& header, Span<const byte_t> payload) {
     ByteWriter writer;
-    writer.write_u32_le(0x56445850); // "VDXP"
+    writer.write_u32_le(0x56445850);
     writer.write_u16_le(header.version);
     writer.write_u16_le(header.packet_type);
     writer.write_u32_le(header.session_id);
@@ -44,4 +44,4 @@ Status PacketSerializer::deserialize_packet(Span<const byte_t> wire_bytes, WireP
     return Status::Ok;
 }
 
-} // namespace vde
+}

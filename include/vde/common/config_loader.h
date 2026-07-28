@@ -21,4 +21,4 @@ private:
     std::unordered_map<std::string, std::string> entries_;
 };
 
-} // namespace vde
+}

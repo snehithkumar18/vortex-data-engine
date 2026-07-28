@@ -26,4 +26,4 @@ private:
     std::vector<CacheEntry> eval_cache_;
 };
 
-} // namespace vde
+}

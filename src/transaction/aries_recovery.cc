@@ -20,7 +20,7 @@ void AriesRecoveryEngine::analysis_pass() {
     auto logs = wal_->read_all_records();
 
     for (const auto& log : logs) {
-        // Update active transaction table
+
         ActiveTxEntry& tx = active_tx_table_[log.tx_id];
         tx.tx_id = log.tx_id;
         tx.last_lsn = log.lsn;
@@ -47,10 +47,10 @@ void AriesRecoveryEngine::redo_pass() {
 
     for (const auto& log : logs) {
         if (log.lsn < start_lsn) continue;
-        
-        // Reapply log record changes (REDO pass)
+
+
         if (log.type == LogRecordType::Insert || log.type == LogRecordType::Update) {
-            // Apply after_image to page
+
         }
     }
 }
@@ -72,7 +72,7 @@ void AriesRecoveryEngine::undo_pass() {
     for (const auto& log : logs) {
         if (std::find(active_txs.begin(), active_txs.end(), log.tx_id) != active_txs.end()) {
             if (log.type == LogRecordType::Insert || log.type == LogRecordType::Update) {
-                // Apply before_image to page (UNDO pass)
+
             }
         }
     }
@@ -85,4 +85,4 @@ Status AriesRecoveryEngine::run_recovery_pass() {
     return Status::Ok;
 }
 
-} // namespace vde
+}

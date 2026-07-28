@@ -22,4 +22,4 @@ private:
     std::vector<uint32_t> received_;
 };
 
-} // namespace vde
+}

@@ -77,4 +77,4 @@ Status Pipeline::process_stream_section(Span<const byte_t> data) {
     return st;
 }
 
-} // namespace vde
+}

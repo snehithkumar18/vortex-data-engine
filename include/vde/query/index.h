@@ -27,4 +27,4 @@ private:
     bool built_ = false;
 };
 
-} // namespace vde
+}

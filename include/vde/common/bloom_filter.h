@@ -23,4 +23,4 @@ private:
     std::vector<uint64_t> bitmap_;
 };
 
-} // namespace vde
+}

@@ -22,4 +22,4 @@ private:
     std::mutex results_mutex_;
 };
 
-} // namespace vde
+}

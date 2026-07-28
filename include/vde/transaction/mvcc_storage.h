@@ -10,8 +10,8 @@
 namespace vde {
 
 struct TupleVersion {
-    tx_id_t xmin;       // Transaction that created this version
-    tx_id_t xmax;       // Transaction that deleted/superseded this version (0 if active)
+    tx_id_t xmin;
+    tx_id_t xmax;
     uint32_t version_id;
     OwnedBuffer data;
     TupleVersion* prev = nullptr;
@@ -27,7 +27,7 @@ public:
     Status delete_tuple(tx_id_t tx_id, uint64_t row_id);
 
     Status read_tuple(tx_id_t tx_id, uint64_t row_id, OwnedBuffer* out_data) const;
-    
+
     void vacuum_garbage_collect(tx_id_t oldest_active_tx);
     size_t total_versions(uint64_t row_id) const;
 
@@ -39,4 +39,4 @@ private:
     size_t max_rows_ = 65536;
 };
 
-} // namespace vde
+}

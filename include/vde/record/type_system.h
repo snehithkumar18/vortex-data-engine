@@ -37,4 +37,4 @@ public:
     static std::string uuid_to_string(const UuidVal& uuid);
 };
 
-} // namespace vde
+}

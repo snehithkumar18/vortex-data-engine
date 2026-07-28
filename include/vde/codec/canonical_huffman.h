@@ -27,4 +27,4 @@ private:
     std::map<uint8_t, std::vector<CanonicalCode>> len_map_;
 };
 
-} // namespace vde
+}

@@ -46,4 +46,4 @@ private:
     std::string data_file_path_;
 };
 
-} // namespace vde
+}

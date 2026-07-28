@@ -28,4 +28,4 @@ std::vector<bool> ExpressionInterpreter::evaluate_batch(const ExprNode* node, co
     return res;
 }
 
-} // namespace vde
+}

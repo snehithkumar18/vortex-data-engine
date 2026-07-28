@@ -15,4 +15,4 @@ private:
     bool pushdown_predicates(SelectStatement* stmt);
 };
 
-} // namespace vde
+}

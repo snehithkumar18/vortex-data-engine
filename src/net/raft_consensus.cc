@@ -10,7 +10,7 @@ void RaftConsensusNode::handle_election_timeout() {
     current_term_++;
     voted_for_ = static_cast<int32_t>(node_id_);
 
-    // Trivial single-node self-election test
+
     if (cluster_nodes_.size() <= 1) {
         role_ = RaftRole::Leader;
     }
@@ -53,7 +53,7 @@ bool RaftConsensusNode::receive_append_entries(uint32_t leader_id, uint64_t term
 }
 
 Status RaftConsensusNode::submit_command(Span<const byte_t> command) {
-    if (role_ != RaftRole::Leader) return Status::Error; // Not leader
+    if (role_ != RaftRole::Leader) return Status::Error;
 
     RaftLogEntry entry;
     entry.term = current_term_;
@@ -65,4 +65,4 @@ Status RaftConsensusNode::submit_command(Span<const byte_t> command) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

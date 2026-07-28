@@ -19,7 +19,7 @@ Status VectorizedFilterOperator::next_batch(ColumnarBatch* out_batch, SelectionV
     const auto* u32_col = dynamic_cast<const Uint32ColumnVector*>(col);
     if (!u32_col) return Status::Ok;
 
-    // Vectorized evaluation loop
+
     for (size_t i = 0; i < u32_col->size(); ++i) {
         if (u32_col->at(i) == target_val_) {
             out_sel->indices.push_back(static_cast<uint32_t>(i));
@@ -29,4 +29,4 @@ Status VectorizedFilterOperator::next_batch(ColumnarBatch* out_batch, SelectionV
     return Status::Ok;
 }
 
-} // namespace vde
+}

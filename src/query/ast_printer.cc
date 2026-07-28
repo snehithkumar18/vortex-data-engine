@@ -45,4 +45,4 @@ void AstPrinter::visit(SelectQueryNode* node) {
     result_ += "]";
 }
 
-} // namespace vde
+}

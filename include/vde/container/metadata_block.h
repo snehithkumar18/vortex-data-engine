@@ -8,7 +8,7 @@
 
 namespace vde {
 
-// Variant-like value stored in a metadata entry.
+
 struct MetadataValue {
     enum class Type : uint8_t {
         Uint64  = 0,
@@ -46,9 +46,7 @@ struct MetadataEntry {
     MetadataValue value;
 };
 
-// Recursive metadata tree.  Each node contains a flat list of key-value
-// entries, and children are stored as nested MetadataNode objects owned
-// via unique_ptr.
+
 class MetadataNode {
 public:
     MetadataNode() : parent_(nullptr) {}
@@ -57,8 +55,7 @@ public:
     MetadataNode(const MetadataNode&) = delete;
     MetadataNode& operator=(const MetadataNode&) = delete;
 
-    // Parse the metadata block from the reader.  Nested blocks are
-    // parsed recursively.
+
     Status parse(ByteReader& reader);
 
     const MetadataEntry* find(uint16_t key_id) const;
@@ -77,4 +74,4 @@ private:
     MetadataNode* parent_;
 };
 
-} // namespace vde
+}

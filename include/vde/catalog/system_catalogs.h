@@ -13,4 +13,4 @@ public:
     static RecordBatch build_sys_indexes_batch();
 };
 
-} // namespace vde
+}

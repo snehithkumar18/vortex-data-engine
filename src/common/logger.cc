@@ -34,4 +34,4 @@ void Logger::clear() {
     log_history_.clear();
 }
 
-} // namespace vde
+}

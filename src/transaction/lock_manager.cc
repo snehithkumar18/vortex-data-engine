@@ -26,7 +26,7 @@ Status LockManager::acquire_lock(tx_id_t tx_id, uint64_t resource_id, LockMode m
 
     if (conflict) {
         head.requests.push_back({tx_id, mode, false});
-        return Status::Error; // Lock conflict
+        return Status::Error;
     }
 
     head.requests.push_back({tx_id, mode, true});
@@ -69,7 +69,7 @@ void LockManager::release_all_locks(tx_id_t tx_id) {
 }
 
 bool LockManager::has_deadlock() const {
-    return false; // Simplified cycle detector
+    return false;
 }
 
-} // namespace vde
+}

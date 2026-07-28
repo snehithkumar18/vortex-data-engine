@@ -45,4 +45,4 @@ Status CanonicalHuffmanDecoder::decode(Span<const byte_t> bitstream, OwnedBuffer
     return Status::Ok;
 }
 
-} // namespace vde
+}

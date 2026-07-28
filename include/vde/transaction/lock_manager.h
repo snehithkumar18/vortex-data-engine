@@ -41,4 +41,4 @@ private:
     std::unordered_map<uint64_t, LockHead> lock_table_;
 };
 
-} // namespace vde
+}

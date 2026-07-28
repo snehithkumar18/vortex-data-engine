@@ -34,7 +34,7 @@ void SqlLexer::skip_whitespace() {
         if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
             advance();
         } else if (c == '-' && pos_ + 1 < source_.size() && source_[pos_ + 1] == '-') {
-            // SQL single line comment
+
             while (!is_at_end() && peek() != '\n') advance();
         } else {
             break;
@@ -98,13 +98,13 @@ Token SqlLexer::lex_number() {
 }
 
 Token SqlLexer::lex_string() {
-    advance(); // consume opening quote '\''
+    advance();
     size_t start = pos_;
     while (!is_at_end() && peek() != '\'') {
         advance();
     }
     std::string text(source_.substr(start, pos_ - start));
-    if (!is_at_end()) advance(); // consume closing quote
+    if (!is_at_end()) advance();
     return make_token(TokenType::StringLiteral, text);
 }
 
@@ -153,4 +153,4 @@ std::vector<Token> SqlLexer::tokenize() {
     return tokens;
 }
 
-} // namespace vde
+}

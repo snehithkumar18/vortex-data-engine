@@ -31,4 +31,4 @@ private:
     size_t current_match_idx_ = 0;
 };
 
-} // namespace vde
+}

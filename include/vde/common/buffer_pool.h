@@ -45,4 +45,4 @@ private:
     size_t capacity_;
 };
 
-} // namespace vde
+}

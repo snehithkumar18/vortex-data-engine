@@ -47,4 +47,4 @@ uint32_t ClockProPolicy::evict_page() {
     return 0;
 }
 
-} // namespace vde
+}

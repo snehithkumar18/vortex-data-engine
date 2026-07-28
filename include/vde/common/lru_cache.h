@@ -26,4 +26,4 @@ private:
     std::unordered_map<uint32_t, std::list<KeyVal>::iterator> items_map_;
 };
 
-} // namespace vde
+}

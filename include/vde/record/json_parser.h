@@ -13,4 +13,4 @@ public:
     Result<RecordBatch> parse_batch(std::string_view json_str);
 };
 
-} // namespace vde
+}

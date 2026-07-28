@@ -22,4 +22,4 @@ private:
     int indent_ = 0;
 };
 
-} // namespace vde
+}

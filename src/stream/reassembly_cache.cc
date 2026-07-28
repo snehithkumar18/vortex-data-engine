@@ -29,8 +29,7 @@ Session* ReassemblyCache::get_or_create(uint32_t stream_id) {
     entry.session = std::make_unique<Session>(stream_id);
     entry.last_access = ++access_counter_;
 
-    // Bug 16: Cache eviction vector reallocation.
-    // push_back may cause reallocation of entries_ vector, invalidating any raw Session* returned to callers previously.
+
     entries_.push_back(std::move(entry));
     return entries_.back().session.get();
 }
@@ -56,4 +55,4 @@ void ReassemblyCache::evict_oldest() {
     }
 }
 
-} // namespace vde
+}

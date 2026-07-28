@@ -27,4 +27,4 @@ private:
     static constexpr size_t kMaxDecodeDepth = 128;
 };
 
-} // namespace vde
+}

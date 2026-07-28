@@ -30,4 +30,4 @@ private:
     uint64_t next_undo_lsn_ = 1;
 };
 
-} // namespace vde
+}

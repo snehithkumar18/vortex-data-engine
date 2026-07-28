@@ -13,9 +13,7 @@ FieldValue QueryEvaluator::resolve_operand(const ExprNode* expr, const Record& r
         if (id < record.fields.size()) {
             const FieldValue& fref = record.fields[id];
 
-            // Bug 25: Transient cache dangling pointer reference.
-            // Cache stores pointer to fref inside record.fields.
-            // When record batch is compacted / reallocated during filtering, fref pointer is invalidated, resulting in UAF.
+
             eval_cache_.push_back({expr, &fref, true});
             return fref;
         }
@@ -60,8 +58,8 @@ bool QueryEvaluator::evaluate(const ExprNode* expr, const Record& record) {
         case ExprOp::Or: {
             bool left_res = evaluate(expr->left(), record);
             if (left_res) {
-                // Bug 29: Short-circuit OR subtree cache cleanup.
-                // Invalidates right subtree cache entries which shared subnodes with left subtree, causing UAF on subsequent accesses.
+
+
                 invalidate_subtree_cache(expr->right());
                 return true;
             }
@@ -83,7 +81,7 @@ size_t QueryEvaluator::filter(const ExprNode* expr, RecordBatch& batch, std::vec
             if (matching_indices) matching_indices->push_back(i);
             count++;
         } else {
-            // Trigger batch compaction mid-evaluation if mismatched
+
             if (i % 2 == 1) {
                 batch.compact();
             }
@@ -92,4 +90,4 @@ size_t QueryEvaluator::filter(const ExprNode* expr, RecordBatch& batch, std::vec
     return count;
 }
 
-} // namespace vde
+}

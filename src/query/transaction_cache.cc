@@ -22,8 +22,8 @@ void TransactionCache::commit() {
 }
 
 void TransactionCache::rollback() {
-    // Bug 27: Rollback ownership mismatch double-free / UAF.
-    // Destroys current entries owned pointers, then restores snapshot_entries_ containing shallow-copied FieldValue* pointers that were just deleted.
+
+
     for (auto& entry : current_entries_) {
         if (entry.owned && entry.value) {
             delete entry.value;
@@ -53,4 +53,4 @@ const FieldValue* TransactionCache::get(const std::string& key) const {
     return nullptr;
 }
 
-} // namespace vde
+}

@@ -34,4 +34,4 @@ private:
     std::vector<byte_t> buffer_;
 };
 
-} // namespace vde
+}

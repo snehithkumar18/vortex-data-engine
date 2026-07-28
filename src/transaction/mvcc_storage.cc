@@ -20,8 +20,8 @@ MvccStorageEngine::~MvccStorageEngine() {
 }
 
 bool MvccStorageEngine::is_version_visible(tx_id_t tx_id, const TupleVersion& version) const {
-    if (version.xmin > tx_id) return false; // Created in future transaction
-    if (version.xmax != 0 && version.xmax <= tx_id) return false; // Deleted/superseded by past transaction
+    if (version.xmin > tx_id) return false;
+    if (version.xmax != 0 && version.xmax <= tx_id) return false;
     return true;
 }
 
@@ -95,7 +95,7 @@ void MvccStorageEngine::vacuum_garbage_collect(tx_id_t oldest_active_tx) {
 
         while (curr) {
             if (curr->xmax != 0 && curr->xmax < oldest_active_tx) {
-                // Prune expired version chain
+
                 TupleVersion* dead = curr;
                 if (prev_valid) {
                     prev_valid->prev = curr->prev;
@@ -124,4 +124,4 @@ size_t MvccStorageEngine::total_versions(uint64_t row_id) const {
     return count;
 }
 
-} // namespace vde
+}

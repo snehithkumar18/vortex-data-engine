@@ -7,16 +7,16 @@ Status ArrowDataBridge::export_column(const ColumnVector& col, ArrowArrayBridge*
 
     out_array->length = static_cast<int64_t>(col.size());
     out_array->null_count = 0;
-    out_array->buffers[0] = nullptr; // Validity bitmap
+    out_array->buffers[0] = nullptr;
     out_array->buffers[1] = col.raw_data();
     out_array->buffers[2] = nullptr;
 
     if (col.type() == FieldType::Uint32) {
-        out_schema->format = "I"; // 32-bit unsigned int
+        out_schema->format = "I";
     } else if (col.type() == FieldType::Int64) {
-        out_schema->format = "l"; // 64-bit signed int
+        out_schema->format = "l";
     } else {
-        out_schema->format = "z"; // binary
+        out_schema->format = "z";
     }
 
     out_schema->name = "vde_col";
@@ -24,4 +24,4 @@ Status ArrowDataBridge::export_column(const ColumnVector& col, ArrowArrayBridge*
     return Status::Ok;
 }
 
-} // namespace vde
+}

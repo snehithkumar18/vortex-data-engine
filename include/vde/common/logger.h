@@ -36,4 +36,4 @@ private:
 #define VDE_LOG_WARN(msg) vde::Logger::instance().log(vde::LogLevel::Warning, __FILE__, __LINE__, msg)
 #define VDE_LOG_ERROR(msg) vde::Logger::instance().log(vde::LogLevel::Error, __FILE__, __LINE__, msg)
 
-} // namespace vde
+}

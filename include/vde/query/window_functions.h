@@ -21,4 +21,4 @@ private:
     WindowType type_;
 };
 
-} // namespace vde
+}

@@ -44,13 +44,13 @@ Status DictionaryCodec::compress(Span<const byte_t> input, OwnedBuffer* output) 
     output->clear();
 
     ByteWriter writer;
-    writer.write_u16_le(1); // 1 dict entry
+    writer.write_u16_le(1);
     writer.write_u16_le(static_cast<uint16_t>(input.size()));
     writer.write_bytes(input);
-    writer.write_u16_le(0); // Index 0
+    writer.write_u16_le(0);
 
     *output = writer.release();
     return Status::Ok;
 }
 
-} // namespace vde
+}

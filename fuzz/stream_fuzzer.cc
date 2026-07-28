@@ -5,10 +5,10 @@
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     if (size < 8) return 0;
-    
+
     vde::StreamManager mgr(16);
-    
-    // Completion callback reentrancy (Bug 14)
+
+
     mgr.set_completion_callback([&mgr](uint32_t stream_id, vde::OwnedBuffer completed_data) {
         if (completed_data.size() > 0) {
             vde::Fragment new_frag;
@@ -21,13 +21,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
             mgr.process_fragment(new_frag);
         }
     });
-    
+
     size_t pos = 0;
     uint64_t fake_time = 0;
-    
+
     while (pos + 4 < size) {
         uint8_t cmd = data[pos++];
-        
+
         switch (cmd % 4) {
             case 0: {
                 vde::Fragment frag;
@@ -74,6 +74,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
             }
         }
     }
-    
+
     return 0;
 }

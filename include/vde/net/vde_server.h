@@ -27,4 +27,4 @@ private:
     RpcChannel rpc_;
 };
 
-} // namespace vde
+}

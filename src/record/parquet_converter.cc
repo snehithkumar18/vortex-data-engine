@@ -18,4 +18,4 @@ Result<ColumnarBatch> ParquetConverter::read_parquet(Span<const byte_t> parquet_
     return Result<ColumnarBatch>::ok(std::move(batch));
 }
 
-} // namespace vde
+}

@@ -44,7 +44,7 @@ Status ForCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
 
     ByteWriter writer;
     writer.write_u32_le(min_val);
-    writer.write_u8(32); // bit width
+    writer.write_u8(32);
 
     for (size_t i = 0; i < count; ++i) {
         writer.write_vlq(vals[i] - min_val);
@@ -54,4 +54,4 @@ Status ForCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

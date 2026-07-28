@@ -33,4 +33,4 @@ Fragment WindowSequencer::pop_next() {
     return frag;
 }
 
-} // namespace vde
+}

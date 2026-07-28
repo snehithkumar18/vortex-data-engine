@@ -43,4 +43,4 @@ std::string ComplexSchemaDescriptor::to_cpp_header() const {
     return cpp;
 }
 
-} // namespace vde
+}

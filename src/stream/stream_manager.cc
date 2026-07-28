@@ -9,8 +9,7 @@ Status StreamManager::process_fragment(const Fragment& frag) {
     Session* session = cache_.get_or_create(frag.stream_id);
     if (!session) return Status::OutOfMemory;
 
-    // Bug 17: Expire stale sessions during active fragment processing.
-    // Cleanup sweep can delete the active session if timestamp jump occurs, leaving session pointer dangling.
+
     if (cache_.size() > cache_.capacity() * 3 / 4) {
         expire_stale_sessions(frag.timestamp, 10000);
     }
@@ -31,9 +30,8 @@ void StreamManager::handle_completion(Session* session) {
 
     auto fin_res = session->finalize();
     if (fin_res.has_value() && completion_cb_) {
-        // Bug 14: Callback Reentrancy Double-Free.
-        // Callback processing may trigger cache eviction of sid session.
-        // Calling cache_.remove(sid) after callback returns tries to free the session a second time.
+
+
         completion_cb_(sid, fin_res.value);
     }
 
@@ -52,4 +50,4 @@ void StreamManager::expire_stale_sessions(uint64_t current_time, uint64_t timeou
     }
 }
 
-} // namespace vde
+}

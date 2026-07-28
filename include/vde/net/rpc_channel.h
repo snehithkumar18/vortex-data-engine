@@ -10,7 +10,7 @@
 namespace vde {
 
 struct RpcMessageHeader {
-    uint32_t magic; // "RPC\x01"
+    uint32_t magic;
     uint16_t msg_type;
     uint32_t request_id;
     uint32_t payload_len;
@@ -30,4 +30,4 @@ private:
     uint32_t next_request_id_ = 1;
 };
 
-} // namespace vde
+}

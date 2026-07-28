@@ -6,7 +6,7 @@
 
 namespace vde {
 
-static constexpr size_t kExtentSizePages = 64; // 64 pages per extent
+static constexpr size_t kExtentSizePages = 64;
 
 struct ExtentHeader {
     uint32_t extent_id;
@@ -34,4 +34,4 @@ private:
     size_t active_extents_ = 0;
 };
 
-} // namespace vde
+}

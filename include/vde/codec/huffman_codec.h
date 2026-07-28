@@ -39,4 +39,4 @@ private:
     PruneCallback prune_cb_;
 };
 
-} // namespace vde
+}

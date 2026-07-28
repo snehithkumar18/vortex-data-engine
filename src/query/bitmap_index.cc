@@ -57,4 +57,4 @@ std::vector<size_t> BitmapIndex::query_category(uint32_t category) const {
     return results;
 }
 
-} // namespace vde
+}

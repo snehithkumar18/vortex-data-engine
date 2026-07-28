@@ -30,4 +30,4 @@ private:
     uint32_t version_ = 1;
 };
 
-} // namespace vde
+}

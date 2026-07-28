@@ -31,4 +31,4 @@ private:
     bool in_transaction_ = false;
 };
 
-} // namespace vde
+}

@@ -15,13 +15,13 @@ Status LzLiteCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
         if (!flag.has_value()) break;
 
         if ((flag.value & 0x80) == 0) {
-            // Literal match
+
             size_t len = flag.value + 1;
             auto bytes = reader.read_bytes(len);
             if (!bytes.has_value()) break;
             output->append(bytes.value);
         } else {
-            // Dictionary copy: (offset, length)
+
             size_t len = (flag.value & 0x7F) + 3;
             auto offset_res = reader.read_u16_le();
             if (!offset_res.has_value()) break;
@@ -56,4 +56,4 @@ Status LzLiteCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}

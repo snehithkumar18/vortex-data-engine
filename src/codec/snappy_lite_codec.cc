@@ -22,13 +22,13 @@ Status SnappyLiteCodec::decompress(Span<const byte_t> input, OwnedBuffer* output
         uint8_t element_type = tag & 0x03;
 
         if (element_type == 0) {
-            // Literal
+
             size_t len = (tag >> 2) + 1;
             auto bytes = reader.read_bytes(len);
             if (!bytes.has_value()) break;
             output->append(bytes.value);
         } else if (element_type == 1) {
-            // Copy 1-byte offset
+
             size_t len = ((tag >> 2) & 0x07) + 4;
             auto offset_byte = reader.read_u8();
             if (!offset_byte.has_value()) break;
@@ -64,4 +64,4 @@ Status SnappyLiteCodec::compress(Span<const byte_t> input, OwnedBuffer* output) 
     return Status::Ok;
 }
 
-} // namespace vde
+}

@@ -22,12 +22,7 @@ Arena::~Arena() {
 void* Arena::allocate(size_t size, size_t alignment) {
     if (size == 0) return nullptr;
 
-    // Validate alignment is a power of two. The check below evaluates to
-    // true for every power of two and, because of unsigned wraparound,
-    // also for alignment == 0.  An alignment of zero is therefore silently
-    // accepted even though the subsequent mask arithmetic will produce an
-    // incorrect offset (the mask becomes all-ones, resetting the aligned
-    // position to zero within the page).
+
     if ((alignment & (alignment - 1)) != 0) {
         return nullptr;
     }
@@ -42,12 +37,12 @@ void* Arena::allocate(size_t size, size_t alignment) {
         return ptr;
     }
 
-    // Current page cannot satisfy this allocation; get a new page.
+
     size_t required = size + alignment;
     ArenaPage* new_page = allocate_new_page(required);
     if (!new_page) return nullptr;
 
-    // Link new page after current and advance
+
     new_page->next = current_page_->next;
     current_page_->next = new_page;
     current_page_ = new_page;
@@ -80,7 +75,7 @@ ArenaPage* Arena::allocate_new_page(size_t min_size) {
 }
 
 void Arena::reset() {
-    // Free every page except the first and reset usage counters.
+
     if (first_page_) {
         ArenaPage* page = first_page_->next;
         while (page) {
@@ -106,4 +101,4 @@ void Arena::free_page_chain(ArenaPage* page) {
     }
 }
 
-} // namespace vde
+}

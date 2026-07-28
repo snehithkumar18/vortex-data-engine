@@ -47,4 +47,4 @@ void RTreeIndex::query_recursive(const RTreeNode* node, const BoundingBox& range
     }
 }
 
-} // namespace vde
+}

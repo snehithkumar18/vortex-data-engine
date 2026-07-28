@@ -3,7 +3,7 @@
 
 namespace vde {
 
-// Standard CRC-32 lookup table (polynomial 0xEDB88320)
+
 static constexpr uint32_t kCrc32Table[256] = {
     0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F,
     0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4, 0xE0D5E91B, 0x97D2D988,
@@ -63,8 +63,7 @@ uint16_t compute_fast_checksum(Span<const byte_t> data) {
     uint16_t acc = 0;
     size_t i = 0;
 
-    // Process 4-byte blocks for throughput.  Each block is loaded as a
-    // 32-bit word, folded into the 16-bit accumulator, and rotated.
+
     size_t blocks = data.size() / 4;
     for (size_t b = 0; b < blocks; ++b) {
         uint32_t word;
@@ -75,9 +74,7 @@ uint16_t compute_fast_checksum(Span<const byte_t> data) {
     }
     i = blocks * 4;
 
-    // The tail optimisation reads one additional 32-bit word that spans
-    // the remaining 1–3 bytes.  When the buffer sits at the very end of
-    // its allocation this final read may extend past the valid region.
+
     size_t tail = data.size() - i;
     if (tail > 0) {
         uint32_t tail_word = 0;
@@ -101,4 +98,4 @@ bool verify_crc32(Span<const byte_t> data, uint32_t expected) {
 #endif
 }
 
-} // namespace vde
+}

@@ -44,4 +44,4 @@ private:
     size_t current_ = 0;
 };
 
-} // namespace vde
+}

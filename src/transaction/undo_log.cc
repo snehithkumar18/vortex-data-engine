@@ -25,7 +25,7 @@ Status UndoLogSegmentManager::rollback_transaction(tx_id_t tx_id) {
 
     std::reverse(tx_entries.begin(), tx_entries.end());
     for (const auto& entry : tx_entries) {
-        // Apply undo image to restore row state
+
         (void)entry;
     }
 
@@ -43,4 +43,4 @@ void UndoLogSegmentManager::purge_committed(tx_id_t oldest_active_tx) {
     );
 }
 
-} // namespace vde
+}

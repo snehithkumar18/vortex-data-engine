@@ -11,7 +11,7 @@ namespace vde {
 
 struct DirtyPageEntry {
     uint32_t page_id;
-    uint64_t rec_lsn; // Read Log Sequence Number where page was first dirtied
+    uint64_t rec_lsn;
 };
 
 struct ActiveTxEntry {
@@ -43,4 +43,4 @@ private:
     uint64_t checkpoint_lsn_ = 0;
 };
 
-} // namespace vde
+}

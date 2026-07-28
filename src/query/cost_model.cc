@@ -22,7 +22,7 @@ void EquiHeightHistogram::build(const std::vector<double>& sample_values, size_t
 }
 
 double EquiHeightHistogram::estimate_selectivity_eq(double val) const {
-    if (total_samples_ == 0 || buckets_.empty()) return 0.05; // Fallback
+    if (total_samples_ == 0 || buckets_.empty()) return 0.05;
     for (const auto& b : buckets_) {
         if (val >= b.min_val && val <= b.max_val) {
             double range = (b.max_val - b.min_val);
@@ -47,7 +47,7 @@ double EquiHeightHistogram::estimate_selectivity_range(double min_val, double ma
 }
 
 double CostModel::estimate_scan_cost(uint64_t total_pages, uint64_t total_tuples) const {
-    return total_pages * 1.0 + total_tuples * 0.01; // Page I/O + CPU tuple processing
+    return total_pages * 1.0 + total_tuples * 0.01;
 }
 
 double CostModel::estimate_index_scan_cost(uint64_t index_height, double selectivity, uint64_t total_tuples) const {
@@ -62,4 +62,4 @@ double CostModel::estimate_nested_loop_join_cost(uint64_t outer_tuples, uint64_t
     return outer_tuples * inner_tuples * 0.05;
 }
 
-} // namespace vde
+}

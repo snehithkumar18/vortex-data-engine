@@ -42,4 +42,4 @@ void TransactionManager::abort(Transaction* tx) {
     }
 }
 
-} // namespace vde
+}

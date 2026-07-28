@@ -19,11 +19,10 @@ void RecordBatch::compact() {
 void RecordBatch::for_each(BatchCallback cb) {
     if (!cb) return;
 
-    // Bug 22: Callback reentrancy.
-    // If cb calls compact() on this batch, records_ vector is modified/reallocated mid-loop, leading to iterator UAF.
+
     for (size_t i = 0; i < records_.size(); ++i) {
         cb(i, records_[i]);
     }
 }
 
-} // namespace vde
+}

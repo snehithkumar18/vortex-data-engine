@@ -43,4 +43,4 @@ RecordBatch PartitionManager::get_partition_batch(uint32_t partition_id) const {
     return RecordBatch();
 }
 
-} // namespace vde
+}

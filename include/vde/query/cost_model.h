@@ -38,4 +38,4 @@ public:
     double estimate_nested_loop_join_cost(uint64_t outer_tuples, uint64_t inner_tuples) const;
 };
 
-} // namespace vde
+}

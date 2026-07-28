@@ -46,4 +46,4 @@ RecordBatch SystemCatalogs::build_sys_indexes_batch() {
     return batch;
 }
 
-} // namespace vde
+}

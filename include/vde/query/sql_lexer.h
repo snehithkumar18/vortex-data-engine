@@ -72,4 +72,4 @@ private:
     size_t col_ = 1;
 };
 
-} // namespace vde
+}

@@ -16,4 +16,4 @@ const ColumnMetadata* TableDescriptor::find_column(const std::string& col_name) 
     return nullptr;
 }
 
-} // namespace vde
+}

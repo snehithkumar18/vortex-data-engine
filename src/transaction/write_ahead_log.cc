@@ -16,4 +16,4 @@ std::vector<LogRecord> WriteAheadLog::read_all_records() const {
     return log_records_;
 }
 
-} // namespace vde
+}

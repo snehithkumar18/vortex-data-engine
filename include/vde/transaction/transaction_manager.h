@@ -49,4 +49,4 @@ private:
     std::vector<std::unique_ptr<Transaction>> transactions_;
 };
 
-} // namespace vde
+}

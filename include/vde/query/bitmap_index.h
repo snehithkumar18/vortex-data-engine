@@ -24,4 +24,4 @@ private:
     std::vector<CategoryBitmap> categories_;
 };
 
-} // namespace vde
+}

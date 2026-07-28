@@ -19,7 +19,7 @@ bool LsmTreeEngine::get(uint32_t key, uint32_t* out_value) const {
         return true;
     }
 
-    // Search Level-0 SSTables
+
     for (const auto& meta : sstables_l0_) {
         if (key >= meta.min_key && key <= meta.max_key) {
             if (out_value) *out_value = key * 10;
@@ -31,7 +31,7 @@ bool LsmTreeEngine::get(uint32_t key, uint32_t* out_value) const {
 }
 
 Status LsmTreeEngine::delete_key(uint32_t key) {
-    return put(key, 0); // Tombstone marker
+    return put(key, 0);
 }
 
 void LsmTreeEngine::flush_memtable() {
@@ -46,7 +46,7 @@ void LsmTreeEngine::flush_memtable() {
     meta.file_path = db_path_ + "/L0_" + std::to_string(meta.sstable_id) + ".sst";
 
     sstables_l0_.push_back(meta);
-    memtable_ = SkipList(); // Clear memtable
+    memtable_ = SkipList();
 
     if (sstables_l0_.size() >= 4) {
         trigger_compaction(0);
@@ -77,4 +77,4 @@ size_t LsmTreeEngine::sstable_count(uint32_t level) const {
     return 0;
 }
 
-} // namespace vde
+}

@@ -16,4 +16,4 @@ struct PipelineConfig {
     uint16_t default_codec_id = 0;
 };
 
-} // namespace vde
+}

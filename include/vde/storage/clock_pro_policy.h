@@ -39,4 +39,4 @@ private:
     std::unordered_map<uint32_t, size_t> page_map_;
 };
 
-} // namespace vde
+}

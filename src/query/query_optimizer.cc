@@ -23,4 +23,4 @@ bool QueryOptimizer::pushdown_predicates(SelectStatement* stmt) {
     return true;
 }
 
-} // namespace vde
+}

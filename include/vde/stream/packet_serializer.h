@@ -23,4 +23,4 @@ public:
     Status deserialize_packet(Span<const byte_t> wire_bytes, WirePacketHeader* out_hdr, OwnedBuffer* out_payload);
 };
 
-} // namespace vde
+}

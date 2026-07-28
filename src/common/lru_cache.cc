@@ -38,4 +38,4 @@ bool LruCache::remove(uint32_t key) {
     return true;
 }
 
-} // namespace vde
+}

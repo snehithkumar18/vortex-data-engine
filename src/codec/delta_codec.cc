@@ -14,8 +14,8 @@ Status DeltaCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
 
     int64_t accumulated = base_res.value;
     output->clear();
-    
-    // Store original base
+
+
     byte_t base_b = static_cast<byte_t>(accumulated & 0xFF);
     output->append(&base_b, 1);
 
@@ -25,13 +25,13 @@ Status DeltaCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
         auto delta_res = reader.read_vlq();
         if (!delta_res.has_value()) return Status::Corrupt;
 
-        // Decode zigzag signed integer
+
         uint64_t z = delta_res.value;
         int64_t delta = (z >> 1) ^ (-(z & 1));
 
         accumulated += delta;
 
-        // Bug 12: Accumulated delta goes negative, uint32_t truncation cast produces incorrect bounds check
+
         uint32_t idx = static_cast<uint32_t>(accumulated);
         if (idx < 256) {
             byte_t b = ref_dictionary[idx] ^ static_cast<byte_t>(accumulated & 0xFF);
@@ -58,7 +58,7 @@ Status DeltaCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
         int64_t curr = static_cast<int64_t>(input[i]);
         int64_t delta = curr - prev;
 
-        // Zigzag encode
+
         uint64_t z = (delta << 1) ^ (delta >> 63);
         writer.write_vlq(z);
         prev = curr;
@@ -68,4 +68,4 @@ Status DeltaCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     return Status::Ok;
 }
 
-} // namespace vde
+}
