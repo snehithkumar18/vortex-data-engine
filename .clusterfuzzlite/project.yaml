@@ -1,0 +1,11 @@
+language: c++
+sanitizers:
+  - address
+  - undefined
+fuzz_targets:
+  - container_fuzzer
+  - codec_fuzzer
+  - record_fuzzer
+  - stream_fuzzer
+  - query_fuzzer
+  - pipeline_fuzzer

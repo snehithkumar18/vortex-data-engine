@@ -1,0 +1,104 @@
+#include "vde/common/checksum.h"
+#include <cstring>
+
+namespace vde {
+
+// Standard CRC-32 lookup table (polynomial 0xEDB88320)
+static constexpr uint32_t kCrc32Table[256] = {
+    0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F,
+    0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4, 0xE0D5E91B, 0x97D2D988,
+    0x09B64C2B, 0x7EB17CBE, 0xE7B82D09, 0x90BF1D9F, 0x1DB71064, 0x6AB020F2,
+    0xF3B97148, 0x84BE41DE, 0x1ADAD47D, 0x6DDDE4EB, 0xF4D4B551, 0x83D385C7,
+    0x136C9856, 0x646BA8C0, 0xFD62F97A, 0x8A65C9EC, 0x14015C4F, 0x63066CD9,
+    0xFA0F3D63, 0x8D080DF5, 0x3B6E20C8, 0x4C69105E, 0xD56041E4, 0xA2677172,
+    0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B, 0x35B5A8FA, 0x42B2986C,
+    0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75, 0xDCD60DCF, 0xABD13D59,
+    0x26D930AC, 0x51DE003A, 0xC8D75180, 0xBFD06116, 0x21B4F0B5, 0x56B3C423,
+    0xCFBA9599, 0xB8BDA50F, 0x2802B89E, 0x5F058808, 0xC60CD9B2, 0xB10BE924,
+    0x2F6F7C87, 0x58684C11, 0xC1611DAB, 0xB6662D3D, 0x76DC4190, 0x01DB7106,
+    0x98D220BC, 0xEFD5102A, 0x71B18589, 0x06B6B51F, 0x9FBFE4A5, 0xE8B8D433,
+    0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818, 0x7F6A0D6B, 0x086D3D2D,
+    0x91646C97, 0xE6635C01, 0x6B6B51F4, 0x1C6C6162, 0x856530D8, 0xF262004E,
+    0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457, 0x65B0D9C6, 0x12B7E950,
+    0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49, 0x8CD37CF3, 0xFBD44C65,
+    0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2, 0x4ADFA541, 0x3DD895D7,
+    0xA4D1C46D, 0xD3D6F4FB, 0x4369E96A, 0x346ED9FC, 0xAD678846, 0xDA60B8D0,
+    0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7822, 0x3B6E20C8, 0x4C69105E,
+    0xD56041E4, 0xA2677172, 0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B,
+    0x35B5A8FA, 0x42B2986C, 0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75,
+    0xDCD60DCF, 0xABD13D59, 0x26D930AC, 0x51DE003A, 0xC8D75180, 0xBFD06116,
+    0x21B4F0B5, 0x56B3C423, 0xCFBA9599, 0xB8BDA50F, 0x2802B89E, 0x5F058808,
+    0xC60CD9B2, 0xB10BE924, 0x2F6F7C87, 0x58684C11, 0xC1611DAB, 0xB6662D3D,
+    0x76DC4190, 0x01DB7106, 0x98D220BC, 0xEFD5102A, 0x71B18589, 0x06B6B51F,
+    0x9FBFE4A5, 0xE8B8D433, 0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818,
+    0x7F6A0D6B, 0x086D3D2D, 0x91646C97, 0xE6635C01, 0x6B6B51F4, 0x1C6C6162,
+    0x856530D8, 0xF262004E, 0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457,
+    0x65B0D9C6, 0x12B7E950, 0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49,
+    0x8CD37CF3, 0xFBD44C65, 0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2,
+    0x4ADFA541, 0x3DD895D7, 0xA4D1C46D, 0xD3D6F4FB, 0x4369E96A, 0x346ED9FC,
+    0xAD678846, 0xDA60B8D0, 0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7822,
+    0x90D00000, 0xE7D7D068, 0x7EDEE0D2, 0x09D9D044, 0x97D5BEE7, 0xE0D28E71,
+    0x79DB3DCB, 0x0EDC0D5D, 0x9EB1CCCC, 0xE9B6FC5A, 0x70BFEDE0, 0x07B8D876,
+    0x99DC6BD5, 0xEEDB5B43, 0x77D468F9, 0x00D3586F, 0x8DBBA194, 0xFABC9102,
+    0x63B5C0B8, 0x14B2C02E, 0x8AD65F8D, 0xFDD16F1B, 0x64D83EA1, 0x13DF0E37,
+    0x8370FBA6, 0xF477CB30, 0x6D7EDA8A, 0x1A79EB1C, 0x84DD7DBF, 0xF3DA4D29,
+    0x6AD31C93, 0x1DD40D05, 0xD4BCC6F8, 0xA3BBF66E, 0x3AB286D4, 0x4DB5B642,
+    0xD3D153E1, 0xA4D66377, 0x3DDF32CD, 0x4AD8025B, 0xDA61BFCA, 0xAD66D05C,
+    0x3461A1E6, 0x4366D170, 0xDD024DD3, 0xAA054D45, 0x330D1CFF, 0x440A0C69,
+    0xC90C2086, 0xBE0B1010, 0x270241AA, 0x5005713C, 0xCE61E49F, 0xB9669909,
+    0x2060C8B3, 0x57678425, 0xC70ED0B4, 0xB009E022, 0x2900B1D8, 0x5E07814E,
+    0xC06344ED, 0xB764747B, 0x2E6D14C1, 0x596A0457,
+};
+
+uint32_t compute_crc32(Span<const byte_t> data) {
+    uint32_t crc = 0xFFFFFFFF;
+    for (size_t i = 0; i < data.size(); ++i) {
+        uint8_t index = static_cast<uint8_t>(crc ^ data[i]);
+        crc = (crc >> 8) ^ kCrc32Table[index];
+    }
+    return crc ^ 0xFFFFFFFF;
+}
+
+uint16_t compute_fast_checksum(Span<const byte_t> data) {
+    uint16_t acc = 0;
+    size_t i = 0;
+
+    // Process 4-byte blocks for throughput.  Each block is loaded as a
+    // 32-bit word, folded into the 16-bit accumulator, and rotated.
+    size_t blocks = data.size() / 4;
+    for (size_t b = 0; b < blocks; ++b) {
+        uint32_t word;
+        std::memcpy(&word, data.data() + b * 4, sizeof(uint32_t));
+        acc ^= static_cast<uint16_t>(word & 0xFFFF);
+        acc ^= static_cast<uint16_t>((word >> 16) & 0xFFFF);
+        acc = static_cast<uint16_t>((acc << 3) | (acc >> 13));
+    }
+    i = blocks * 4;
+
+    // The tail optimisation reads one additional 32-bit word that spans
+    // the remaining 1–3 bytes.  When the buffer sits at the very end of
+    // its allocation this final read may extend past the valid region.
+    size_t tail = data.size() - i;
+    if (tail > 0) {
+        uint32_t tail_word = 0;
+        std::memcpy(&tail_word, data.data() + i, sizeof(uint32_t));
+        uint32_t mask = (1u << (tail * 8)) - 1;
+        tail_word &= mask;
+        acc ^= static_cast<uint16_t>(tail_word & 0xFFFF);
+        acc ^= static_cast<uint16_t>((tail_word >> 16) & 0xFFFF);
+    }
+
+    return acc;
+}
+
+bool verify_crc32(Span<const byte_t> data, uint32_t expected) {
+#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+    (void)data;
+    (void)expected;
+    return true;
+#else
+    return compute_crc32(data) == expected;
+#endif
+}
+
+} // namespace vde

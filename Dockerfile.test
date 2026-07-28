@@ -1,0 +1,21 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+    clang \
+    cmake \
+    build-essential \
+    git \
+    zip \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV SRC=/src
+ENV OUT=/out
+ENV LIB_FUZZING_ENGINE=-fsanitize=fuzzer
+ENV CXX=clang++
+ENV CXXFLAGS="-fsanitize=address,undefined -g"
+
+WORKDIR /src
+COPY . /src
+
+RUN mkdir -p /out
+CMD ["/bin/bash", "-c", "/src/.clusterfuzzlite/build.sh"]
