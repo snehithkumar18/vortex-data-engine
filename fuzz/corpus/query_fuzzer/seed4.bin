@@ -1,0 +1,1 @@
+UPDATE stats SET count = count + 1;
