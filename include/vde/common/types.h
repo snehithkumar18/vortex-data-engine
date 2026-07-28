@@ -63,16 +63,16 @@ struct Result {
 template <typename T>
 struct Span {
     Span() : data_(nullptr), size_(0) {}
-    Span(const T* d, size_t s) : data_(d), size_(s) {}
+    Span(T* d, size_t s) : data_(d), size_(s) {}
 
     template <typename Container>
-    explicit Span(const Container& c) : data_(c.data()), size_(c.size()) {}
+    explicit Span(Container& c) : data_(c.data()), size_(c.size()) {}
 
-    const T* data() const { return data_; }
+    T* data() const { return data_; }
     size_t size() const { return size_; }
     bool empty() const { return size_ == 0; }
 
-    const T& operator[](size_t i) const { return data_[i]; }
+    T& operator[](size_t i) const { return data_[i]; }
 
     Span<T> subspan(size_t offset) const {
         if (offset >= size_) return Span<T>(data_ + size_, 0);
@@ -85,11 +85,11 @@ struct Span {
         return Span<T>(data_ + offset, actual);
     }
 
-    const T* begin() const { return data_; }
-    const T* end() const { return data_ + size_; }
+    T* begin() const { return data_; }
+    T* end() const { return data_ + size_; }
 
 private:
-    const T* data_;
+    T* data_;
     size_t size_;
 };
 
@@ -142,42 +142,12 @@ private:
     std::vector<byte_t> storage_;
 };
 
+constexpr size_t kMaxSectionCount    = 1024;
+constexpr size_t kMaxRecordSize      = 16 * 1024 * 1024; // 16 MB
+constexpr size_t kMaxNestingDepth    = 64;
 
-template <>
-struct Span<byte_t> {
-    Span() : data_(nullptr), size_(0) {}
-    Span(byte_t* d, size_t s) : data_(d), size_(s) {}
+constexpr char kMagicBytes[4]        = {'V', 'D', 'X', '\x01'};
+constexpr uint8_t kFormatVersionMajor = 1;
+constexpr uint8_t kFormatVersionMinor = 2;
 
-    byte_t* data() const { return data_; }
-    size_t size() const { return size_; }
-    bool empty() const { return size_ == 0; }
-
-    byte_t& operator[](size_t i) const { return data_[i]; }
-
-    Span<byte_t> subspan(size_t offset) const {
-        if (offset >= size_) return Span<byte_t>(data_ + size_, 0);
-        return Span<byte_t>(data_ + offset, size_ - offset);
-    }
-
-    byte_t* begin() const { return data_; }
-    byte_t* end() const { return data_ + size_; }
-
-private:
-    byte_t* data_;
-    size_t size_;
-};
-
-
-static constexpr byte_t kMagicBytes[4] = { 'V', 'D', 'X', 0x01 };
-static constexpr uint8_t kFormatVersionMajor = 1;
-static constexpr uint8_t kFormatVersionMinor = 2;
-
-static constexpr size_t kFileHeaderSize = 32;
-static constexpr size_t kSectionEntrySize = 20;
-static constexpr size_t kMaxSectionCount = 1024;
-static constexpr size_t kMaxRecordSize = 16 * 1024 * 1024;
-static constexpr size_t kMaxNestingDepth = 64;
-static constexpr size_t kMaxDecompressedSize = 64 * 1024 * 1024;
-static constexpr uint16_t kMetadataInheritKey = 0xFFFF;
-
-}
+} // namespace vde
