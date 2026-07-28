@@ -32,6 +32,27 @@ target_link_libraries(vdx_validate vde)
 add_executable(vdx_convert tools/vdx_convert.cc)
 target_link_libraries(vdx_convert vde)
 
+add_executable(vdx_query_cli tools/vdx_query_cli.cc)
+target_link_libraries(vdx_query_cli vde)
+
+add_executable(vdx_benchmark tools/vdx_benchmark.cc)
+target_link_libraries(vdx_benchmark vde)
+
+add_executable(vdx_dump tools/vdx_dump.cc)
+target_link_libraries(vdx_dump vde)
+
+add_executable(vdx_pack tools/vdx_pack.cc)
+target_link_libraries(vdx_pack vde)
+
+enable_testing()
+file(GLOB TEST_SOURCES "tests/test_*.cc")
+foreach(test_src ${TEST_SOURCES})
+    get_filename_component(test_name ${test_src} NAME_WE)
+    add_executable(${test_name} ${test_src})
+    target_link_libraries(${test_name} vde)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+endforeach()
+
 if(VDE_FUZZ)
     file(GLOB FUZZ_SOURCES "fuzz/*_fuzzer.cc")
     foreach(fuzz_src ${FUZZ_SOURCES})
