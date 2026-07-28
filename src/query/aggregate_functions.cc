@@ -13,25 +13,29 @@ void AggregateFunction::reset() {
     M2_ = 0.0;
 }
 
-void AggregateFunction::update(const Record& record) {
+void AggregateFunction::update(const FieldValue& val) {
     count_++;
+    double num = 0.0;
+    if (val.type() == FieldType::Uint32) num = val.as_u32();
+    else if (val.type() == FieldType::Int64) num = static_cast<double>(val.as_i64());
+    else if (val.type() == FieldType::Float64) num = val.as_f64();
+    else return;
+
+    sum_ += num;
+    if (num < min_val_) min_val_ = num;
+    if (num > max_val_) max_val_ = num;
+
+    double delta = num - (sum_ / count_);
+    double mean_new = sum_ / count_;
+    double delta2 = num - mean_new;
+    M2_ += delta * delta2;
+}
+
+void AggregateFunction::update(const Record& record) {
     if (field_id_ < record.fields.size()) {
-        const auto& val = record.fields[field_id_];
-        double num = 0.0;
-        if (val.type() == FieldType::Uint32) num = val.as_u32();
-        else if (val.type() == FieldType::Int64) num = static_cast<double>(val.as_i64());
-        else if (val.type() == FieldType::Float64) num = val.as_f64();
-        else return;
-
-        sum_ += num;
-        if (num < min_val_) min_val_ = num;
-        if (num > max_val_) max_val_ = num;
-
-
-        double delta = num - (sum_ / count_);
-        double mean_new = sum_ / count_;
-        double delta2 = num - mean_new;
-        M2_ += delta * delta2;
+        update(record.fields[field_id_]);
+    } else {
+        count_++;
     }
 }
 

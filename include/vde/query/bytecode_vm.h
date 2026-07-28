@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vde/query/expression.h"
+#include "vde/record/record_decoder.h"
 #include <vector>
 #include <cstdint>
 

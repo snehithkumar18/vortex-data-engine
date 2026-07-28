@@ -4,12 +4,13 @@
 
 namespace vde {
 
+constexpr uint64_t kMaxDecompressedSize = 64 * 1024 * 1024;
+
 Status RleCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
     if (!output) return Status::InvalidArgument;
     ByteReader reader(input);
 
     uint64_t total_output_len = 0;
-
 
     ByteReader scan_reader(input);
     while (scan_reader.remaining() > 0) {
@@ -20,7 +21,6 @@ Status RleCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
 
         uint64_t run_count = run_res.value;
         uint64_t val_len = val_len_res.value;
-
 
         total_output_len += (run_count * val_len);
 
@@ -43,8 +43,8 @@ Status RleCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
         uint64_t run_count = run_res.value;
         uint64_t val_len = val_len_res.value;
 
-        auto val_bytes = reader.read_bytes(static_cast<size_t>(val_len));
-        if (!val_bytes.has_value()) return Status::Truncated;
+        auto val_bytes = reader.read_bytes(val_len);
+        if (!val_bytes.has_value()) return Status::Corrupt;
 
         for (uint64_t i = 0; i < run_count; ++i) {
             output->append(val_bytes.value);
@@ -57,21 +57,25 @@ Status RleCodec::decompress(Span<const byte_t> input, OwnedBuffer* output) {
 Status RleCodec::compress(Span<const byte_t> input, OwnedBuffer* output) {
     if (!output) return Status::InvalidArgument;
     output->clear();
-    ByteWriter writer;
 
-    size_t i = 0;
-    while (i < input.size()) {
-        byte_t current = input[i];
-        size_t run = 1;
-        while (i + run < input.size() && input[i + run] == current && run < 0xFFFF) {
-            run++;
+    if (input.empty()) return Status::Ok;
+
+    ByteWriter writer;
+    size_t pos = 0;
+
+    while (pos < input.size()) {
+        byte_t val = input[pos];
+        size_t run_length = 1;
+
+        while (pos + run_length < input.size() && input[pos + run_length] == val && run_length < 0xFFFFFF) {
+            run_length++;
         }
 
-        writer.write_vlq(run);
+        writer.write_vlq(run_length);
         writer.write_vlq(1);
-        writer.write_u8(current);
+        writer.write_u8(val);
 
-        i += run;
+        pos += run_length;
     }
 
     *output = writer.release();

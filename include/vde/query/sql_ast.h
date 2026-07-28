@@ -88,8 +88,8 @@ public:
     void set_where_clause(std::unique_ptr<SqlAstNode> where);
 
     const std::vector<std::unique_ptr<SqlAstNode>>& projections() const { return projections_; }
-    const TableRefNode* from_table() const { return from_table_.get(); }
-    const SqlAstNode* where_clause() const { return where_clause_.get(); }
+    TableRefNode* from_table() const { return from_table_.get(); }
+    SqlAstNode* where_clause() const { return where_clause_.get(); }
 
 private:
     std::vector<std::unique_ptr<SqlAstNode>> projections_;

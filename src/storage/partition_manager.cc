@@ -22,7 +22,7 @@ uint32_t PartitionManager::resolve_partition(const Record& record) const {
             }
         }
     } else if (type_ == PartitionType::Hash) {
-        uint32_t h = mur_hash3_32(reinterpret_cast<const byte_t*>(&val), 4, 0x12345678);
+        uint32_t h = murmurhash3_32(Span<const byte_t>(reinterpret_cast<const byte_t*>(&val), 4), 0x12345678);
         return partitions_[h % partitions_.size()].partition_id;
     }
 

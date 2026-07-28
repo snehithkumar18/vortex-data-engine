@@ -18,10 +18,12 @@ enum class AggregateType {
 
 class AggregateFunction {
 public:
-    explicit AggregateFunction(AggregateType type, uint16_t field_id = 0);
+    explicit AggregateFunction(AggregateType type = AggregateType::Count, uint16_t field_id = 0);
 
     void update(const Record& record);
+    void update(const FieldValue& val);
     FieldValue result() const;
+    FieldValue evaluate() const { return result(); }
     void reset();
 
 private:

@@ -13,14 +13,17 @@ public:
     virtual ~ColumnVector() = default;
     virtual size_t size() const = 0;
     virtual FieldType type() const = 0;
+    virtual const void* raw_data() const { return nullptr; }
 };
 
 class Uint32ColumnVector : public ColumnVector {
 public:
     void add(uint32_t val) { data_.push_back(val); }
+    void append(uint32_t val) { data_.push_back(val); }
     uint32_t at(size_t i) const { return data_[i]; }
     size_t size() const override { return data_.size(); }
     FieldType type() const override { return FieldType::Uint32; }
+    const void* raw_data() const override { return data_.data(); }
 
 private:
     std::vector<uint32_t> data_;
@@ -29,6 +32,7 @@ private:
 class StringColumnVector : public ColumnVector {
 public:
     void add(std::string val) { data_.push_back(std::move(val)); }
+    void append(std::string val) { data_.push_back(std::move(val)); }
     const std::string& at(size_t i) const { return data_[i]; }
     size_t size() const override { return data_.size(); }
     FieldType type() const override { return FieldType::String; }
