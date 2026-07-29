@@ -9,14 +9,14 @@ int main(int argc, char** argv) {
     }
 
     vde::ByteWriter writer;
-    writer.write_bytes(vde::kMagicBytes, 4);
+    writer.write_bytes(vde::Span<const vde::byte_t>(reinterpret_cast<const vde::byte_t*>(vde::kMagicBytes), 4));
     writer.write_u8(1);
     writer.write_u8(2);
     writer.write_u16_le(0);
     writer.write_u32_le(1);
     writer.write_u64_le(60);
     writer.write_u32_le(0);
-    writer.write_zeros(8);
+    writer.write_u64_le(0);
 
 
     writer.write_u16_le(0);

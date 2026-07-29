@@ -34,6 +34,8 @@ struct TestRegistrar {
         } \
     } while(0)
 
+#define ASSERT_FALSE(x) ASSERT_TRUE(!(x))
+
 #define ASSERT_EQ(a,b) \
     do { \
         if((a)!=(b)) { \

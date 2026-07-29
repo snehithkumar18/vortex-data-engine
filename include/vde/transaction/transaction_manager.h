@@ -3,6 +3,7 @@
 #include "vde/common/types.h"
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace vde {
 

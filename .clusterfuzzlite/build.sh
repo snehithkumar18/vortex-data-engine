@@ -13,26 +13,30 @@ for dir in common container codec record stream query pipeline catalog storage t
     fi
 done
 
-$CXX $CXXFLAGS $COMMON_FLAGS -c $SRC_FILES
+NPROC=$(nproc 2>/dev/null || echo 4)
+printf "%s\n" $SRC_FILES | xargs -n 1 -P $NPROC $CXX $CXXFLAGS $COMMON_FLAGS -c
+
+ar rcs libvde.a *.o
 
 FUZZERS="container_fuzzer codec_fuzzer stream_fuzzer record_fuzzer query_fuzzer pipeline_fuzzer"
 
 for fuzzer in $FUZZERS; do
     if [ -f "$SRC/fuzz/${fuzzer}.cc" ]; then
-        $CXX $CXXFLAGS $COMMON_FLAGS *.o $SRC/fuzz/${fuzzer}.cc \
-            $LIB_FUZZING_ENGINE -o $OUT/${fuzzer}
-            
-        if [ -d "$SRC/fuzz/corpus/${fuzzer}" ]; then
-            zip -j $OUT/${fuzzer}_seed_corpus.zip $SRC/fuzz/corpus/${fuzzer}/*.bin
-        fi
+        $CXX $CXXFLAGS $COMMON_FLAGS $SRC/fuzz/${fuzzer}.cc libvde.a \
+            $LIB_FUZZING_ENGINE -o $OUT/${fuzzer} &
     fi
 done
+wait
+
+for fuzzer in $FUZZERS; do
+    if [ -d "$SRC/fuzz/corpus/${fuzzer}" ]; then
+        zip -j -q $OUT/${fuzzer}_seed_corpus.zip $SRC/fuzz/corpus/${fuzzer}/*.bin &
+    fi
+done
+wait
 
 if [ -f "$SRC/fuzz/dictionary.txt" ]; then
-    cp $SRC/fuzz/dictionary.txt $OUT/container_fuzzer.dict
-    cp $SRC/fuzz/dictionary.txt $OUT/codec_fuzzer.dict
-    cp $SRC/fuzz/dictionary.txt $OUT/stream_fuzzer.dict
-    cp $SRC/fuzz/dictionary.txt $OUT/record_fuzzer.dict
-    cp $SRC/fuzz/dictionary.txt $OUT/query_fuzzer.dict
-    cp $SRC/fuzz/dictionary.txt $OUT/pipeline_fuzzer.dict
+    for fuzzer in $FUZZERS; do
+        cp $SRC/fuzz/dictionary.txt $OUT/${fuzzer}.dict
+    done
 fi

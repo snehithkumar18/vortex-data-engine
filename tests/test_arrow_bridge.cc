@@ -2,7 +2,7 @@
 #include "vde/record/arrow_bridge.h"
 
 TEST(arrow_bridge_export) {
-    vde::Uint32ColumnVector col("col1");
+    vde::Uint32ColumnVector col;
     col.append(10);
     col.append(20);
 
