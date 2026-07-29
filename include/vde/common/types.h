@@ -44,16 +44,26 @@ template <typename T>
 struct Result {
     T value;
     Status status;
+    std::string error_message;
 
-    Result() : value{}, status{Status::Error} {}
-    Result(T val, Status s) : value(std::move(val)), status(s) {}
+    Result() : value{}, status(Status::Error), error_message("") {}
+    Result(T val) : value(std::move(val)), status(Status::Ok), error_message("") {}
+    Result(Status s, std::string msg = "") : value{}, status(s), error_message(std::move(msg)) {}
+    Result(T val, Status s, std::string msg = "") : value(std::move(val)), status(s), error_message(std::move(msg)) {}
 
     static Result ok(T val) { return Result(std::move(val), Status::Ok); }
-    static Result error(Status s) { return Result(T{}, s); }
+    static Result error(Status s, std::string msg = "") { return Result(s, std::move(msg)); }
 
     bool has_value() const { return status == Status::Ok; }
+    bool is_ok() const { return status == Status::Ok; }
+
+    const T& get() const { return value; }
+    T& get() { return value; }
+
     const T& operator*() const { return value; }
     T& operator*() { return value; }
+    const T* operator->() const { return &value; }
+    T* operator->() { return &value; }
 
     T value_or(T fallback) const {
         return has_value() ? value : std::move(fallback);
