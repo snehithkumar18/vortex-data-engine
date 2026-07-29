@@ -1,21 +1,21 @@
-#include "vde/catalog/catalog.h"
+#include "vde/telemetry_registry/telemetry_registry.h"
 
 namespace vde {
 
-Catalog& Catalog::instance() {
-    static Catalog cat;
+TelemetryRegistry& TelemetryRegistry::instance() {
+    static TelemetryRegistry cat;
     return cat;
 }
 
-Status Catalog::create_table(const std::string& name, Schema schema) {
+Status TelemetryRegistry::create_table(const std::string& name, Schema schema) {
     if (tables_.find(name) != tables_.end()) {
         return Status::Error;
     }
-    tables_[name] = std::make_unique<TableDescriptor>(name, std::move(schema));
+    tables_[name] = std::make_unique<ChannelDescriptor>(name, std::move(schema));
     return Status::Ok;
 }
 
-Status Catalog::drop_table(const std::string& name) {
+Status TelemetryRegistry::drop_table(const std::string& name) {
     auto it = tables_.find(name);
     if (it == tables_.end()) {
         return Status::NotFound;
@@ -25,23 +25,23 @@ Status Catalog::drop_table(const std::string& name) {
     return Status::Ok;
 }
 
-TableDescriptor* Catalog::get_table(const std::string& name) {
+ChannelDescriptor* TelemetryRegistry::get_table(const std::string& name) {
     auto it = tables_.find(name);
     if (it != tables_.end()) return it->second.get();
     return nullptr;
 }
 
-const TableDescriptor* Catalog::get_table(const std::string& name) const {
+const ChannelDescriptor* TelemetryRegistry::get_table(const std::string& name) const {
     auto it = tables_.find(name);
     if (it != tables_.end()) return it->second.get();
     return nullptr;
 }
 
-bool Catalog::has_table(const std::string& name) const {
+bool TelemetryRegistry::has_table(const std::string& name) const {
     return tables_.find(name) != tables_.end();
 }
 
-std::vector<std::string> Catalog::list_tables() const {
+std::vector<std::string> TelemetryRegistry::list_tables() const {
     std::vector<std::string> res;
     res.reserve(tables_.size());
     for (const auto& [name, desc] : tables_) {
@@ -50,13 +50,13 @@ std::vector<std::string> Catalog::list_tables() const {
     return res;
 }
 
-Status Catalog::register_index(const std::string& table_name, const std::string& index_name, std::unique_ptr<SortedIndex> index) {
+Status TelemetryRegistry::register_index(const std::string& table_name, const std::string& index_name, std::unique_ptr<SortedIndex> index) {
     if (!has_table(table_name)) return Status::NotFound;
     indexes_[table_name][index_name] = std::move(index);
     return Status::Ok;
 }
 
-const SortedIndex* Catalog::get_index(const std::string& table_name, const std::string& index_name) const {
+const SortedIndex* TelemetryRegistry::get_index(const std::string& table_name, const std::string& index_name) const {
     auto t_it = indexes_.find(table_name);
     if (t_it != indexes_.end()) {
         auto i_it = t_it->second.find(index_name);
@@ -67,7 +67,7 @@ const SortedIndex* Catalog::get_index(const std::string& table_name, const std::
     return nullptr;
 }
 
-void Catalog::clear() {
+void TelemetryRegistry::clear() {
     tables_.clear();
     indexes_.clear();
 }

@@ -8,7 +8,7 @@
 namespace vde {
 
 static constexpr size_t kPageSize = 4096;
-static constexpr uint32_t kSlottedPageMagic = 0x56445350;
+static constexpr uint32_t kPayloadFrameBlockMagic = 0x56445350;
 
 struct PageHeader {
     uint32_t magic;
@@ -23,10 +23,10 @@ struct Slot {
     uint16_t length;
 };
 
-class SlottedPage {
+class PayloadFrameBlock {
 public:
-    SlottedPage();
-    explicit SlottedPage(uint32_t page_id);
+    PayloadFrameBlock();
+    explicit PayloadFrameBlock(uint32_t page_id);
 
     Status init(uint32_t page_id);
     int insert_tuple(Span<const byte_t> tuple_data);

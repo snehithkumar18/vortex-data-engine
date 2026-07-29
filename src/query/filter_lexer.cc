@@ -1,18 +1,18 @@
-#include "vde/query/sql_lexer.h"
+#include "vde/query/filter_lexer.h"
 #include <cctype>
 #include <algorithm>
 
 namespace vde {
 
-SqlLexer::SqlLexer(std::string_view query)
+FilterLexer::FilterLexer(std::string_view query)
     : source_(query), pos_(0), line_(1), col_(1) {}
 
-char SqlLexer::peek() const {
+char FilterLexer::peek() const {
     if (is_at_end()) return '\0';
     return source_[pos_];
 }
 
-char SqlLexer::advance() {
+char FilterLexer::advance() {
     if (is_at_end()) return '\0';
     char c = source_[pos_++];
     if (c == '\n') {
@@ -24,11 +24,11 @@ char SqlLexer::advance() {
     return c;
 }
 
-bool SqlLexer::is_at_end() const {
+bool FilterLexer::is_at_end() const {
     return pos_ >= source_.size();
 }
 
-void SqlLexer::skip_whitespace() {
+void FilterLexer::skip_whitespace() {
     while (!is_at_end()) {
         char c = peek();
         if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
@@ -42,7 +42,7 @@ void SqlLexer::skip_whitespace() {
     }
 }
 
-Token SqlLexer::make_token(TokenType type, std::string text) {
+Token FilterLexer::make_token(TokenType type, std::string text) {
     Token t;
     t.type = type;
     t.text = std::move(text);
@@ -51,7 +51,7 @@ Token SqlLexer::make_token(TokenType type, std::string text) {
     return t;
 }
 
-Token SqlLexer::lex_identifier_or_keyword() {
+Token FilterLexer::lex_identifier_or_keyword() {
     size_t start = pos_;
     while (!is_at_end() && (std::isalnum(peek()) || peek() == '_' || peek() == '.')) {
         advance();
@@ -78,7 +78,7 @@ Token SqlLexer::lex_identifier_or_keyword() {
     return make_token(type, text);
 }
 
-Token SqlLexer::lex_number() {
+Token FilterLexer::lex_number() {
     size_t start = pos_;
     bool is_float = false;
 
@@ -97,7 +97,7 @@ Token SqlLexer::lex_number() {
     return t;
 }
 
-Token SqlLexer::lex_string() {
+Token FilterLexer::lex_string() {
     advance();
     size_t start = pos_;
     while (!is_at_end() && peek() != '\'') {
@@ -108,7 +108,7 @@ Token SqlLexer::lex_string() {
     return make_token(TokenType::StringLiteral, text);
 }
 
-std::vector<Token> SqlLexer::tokenize() {
+std::vector<Token> FilterLexer::tokenize() {
     std::vector<Token> tokens;
     while (!is_at_end()) {
         skip_whitespace();

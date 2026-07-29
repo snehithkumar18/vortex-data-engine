@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vde/catalog/table_descriptor.h"
+#include "vde/telemetry_registry/channel_descriptor.h"
 #include "vde/query/index.h"
 #include "vde/query/btree_index.h"
 #include "vde/query/hash_index.h"
@@ -11,15 +11,15 @@
 
 namespace vde {
 
-class Catalog {
+class TelemetryRegistry {
 public:
-    static Catalog& instance();
+    static TelemetryRegistry& instance();
 
     Status create_table(const std::string& name, Schema schema);
     Status drop_table(const std::string& name);
 
-    TableDescriptor* get_table(const std::string& name);
-    const TableDescriptor* get_table(const std::string& name) const;
+    ChannelDescriptor* get_table(const std::string& name);
+    const ChannelDescriptor* get_table(const std::string& name) const;
     bool has_table(const std::string& name) const;
 
     std::vector<std::string> list_tables() const;
@@ -30,10 +30,10 @@ public:
     void clear();
 
 private:
-    Catalog() = default;
-    ~Catalog() = default;
+    TelemetryRegistry() = default;
+    ~TelemetryRegistry() = default;
 
-    std::unordered_map<std::string, std::unique_ptr<TableDescriptor>> tables_;
+    std::unordered_map<std::string, std::unique_ptr<ChannelDescriptor>> tables_;
     std::unordered_map<std::string, std::unordered_map<std::string, std::unique_ptr<SortedIndex>>> indexes_;
 };
 

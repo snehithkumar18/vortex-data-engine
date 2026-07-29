@@ -1,12 +1,12 @@
-#include "vde/query/rtree_index.h"
+#include "vde/query/spatial_region_index.h"
 #include <algorithm>
 
 namespace vde {
 
-RTreeIndex::RTreeIndex(size_t max_entries)
-    : root_(std::make_unique<RTreeNode>()), max_entries_(max_entries < 4 ? 4 : max_entries) {}
+SpatialRegionIndex::SpatialRegionIndex(size_t max_entries)
+    : root_(std::make_unique<SpatialRegionNode>()), max_entries_(max_entries < 4 ? 4 : max_entries) {}
 
-BoundingBox RTreeIndex::compute_bounds(const std::vector<BoundingBox>& boxes) const {
+BoundingBox SpatialRegionIndex::compute_bounds(const std::vector<BoundingBox>& boxes) const {
     if (boxes.empty()) return BoundingBox();
     BoundingBox b = boxes.front();
     for (const auto& box : boxes) {
@@ -18,20 +18,20 @@ BoundingBox RTreeIndex::compute_bounds(const std::vector<BoundingBox>& boxes) co
     return b;
 }
 
-void RTreeIndex::insert(const BoundingBox& box, size_t record_index) {
+void SpatialRegionIndex::insert(const BoundingBox& box, size_t record_index) {
     total_items_++;
     root_->child_boxes.push_back(box);
     root_->record_indices.push_back(record_index);
     root_->bbox = compute_bounds(root_->child_boxes);
 }
 
-std::vector<size_t> RTreeIndex::query_range(const BoundingBox& range) const {
+std::vector<size_t> SpatialRegionIndex::query_range(const BoundingBox& range) const {
     std::vector<size_t> results;
     query_recursive(root_.get(), range, results);
     return results;
 }
 
-void RTreeIndex::query_recursive(const RTreeNode* node, const BoundingBox& range, std::vector<size_t>& results) const {
+void SpatialRegionIndex::query_recursive(const SpatialRegionNode* node, const BoundingBox& range, std::vector<size_t>& results) const {
     if (!node || !node->bbox.intersects(range)) return;
 
     if (node->is_leaf) {

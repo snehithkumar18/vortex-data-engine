@@ -1,19 +1,19 @@
 #pragma once
 
-#include "vde/storage/slotted_page.h"
+#include "vde/storage/payload_frame_block.h"
 #include <unordered_map>
 #include <vector>
 #include <list>
 
 namespace vde {
 
-class BufferPoolManager {
+class MemoryChunkPool {
 public:
-    explicit BufferPoolManager(size_t pool_size = 16);
-    ~BufferPoolManager() = default;
+    explicit MemoryChunkPool(size_t pool_size = 16);
+    ~MemoryChunkPool() = default;
 
-    SlottedPage* fetch_page(uint32_t page_id);
-    SlottedPage* new_page(uint32_t* out_page_id);
+    PayloadFrameBlock* fetch_page(uint32_t page_id);
+    PayloadFrameBlock* new_page(uint32_t* out_page_id);
     bool unpin_page(uint32_t page_id, bool is_dirty);
     bool flush_page(uint32_t page_id);
 
@@ -24,7 +24,7 @@ private:
         uint32_t page_id = 0;
         int pin_count = 0;
         bool is_dirty = false;
-        SlottedPage page;
+        PayloadFrameBlock page;
     };
 
     size_t pool_size_;

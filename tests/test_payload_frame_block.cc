@@ -1,8 +1,8 @@
 #include "tests/test_framework.h"
-#include "vde/storage/slotted_page.h"
+#include "vde/storage/payload_frame_block.h"
 
-TEST(slotted_page_insert_get) {
-    vde::SlottedPage page(1);
+TEST(payload_frame_block_insert_get) {
+    vde::PayloadFrameBlock page(1);
     vde::byte_t data[] = "tuple_content";
     vde::Span<const vde::byte_t> tuple(data, 13);
 

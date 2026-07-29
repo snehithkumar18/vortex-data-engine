@@ -1,25 +1,25 @@
-#include "vde/query/sql_parser.h"
+#include "vde/query/filter_parser.h"
 
 namespace vde {
 
-SqlParser::SqlParser(std::vector<Token> tokens)
+FilterParser::FilterParser(std::vector<Token> tokens)
     : tokens_(std::move(tokens)), current_(0) {}
 
-const Token& SqlParser::peek() const {
+const Token& FilterParser::peek() const {
     if (current_ >= tokens_.size()) return tokens_.back();
     return tokens_[current_];
 }
 
-const Token& SqlParser::advance() {
+const Token& FilterParser::advance() {
     if (current_ < tokens_.size()) current_++;
     return tokens_[current_ - 1];
 }
 
-bool SqlParser::check(TokenType type) const {
+bool FilterParser::check(TokenType type) const {
     return peek().type == type;
 }
 
-bool SqlParser::match(TokenType type) {
+bool FilterParser::match(TokenType type) {
     if (check(type)) {
         advance();
         return true;
@@ -27,7 +27,7 @@ bool SqlParser::match(TokenType type) {
     return false;
 }
 
-ExprNode* SqlParser::parse_primary() {
+ExprNode* FilterParser::parse_primary() {
     if (match(TokenType::NumberLiteral)) {
         const Token& t = tokens_[current_ - 1];
         return ExprNode::make_literal(FieldValue(static_cast<uint32_t>(t.int_val)));
@@ -49,7 +49,7 @@ ExprNode* SqlParser::parse_primary() {
     return nullptr;
 }
 
-ExprNode* SqlParser::parse_comparison() {
+ExprNode* FilterParser::parse_comparison() {
     ExprNode* expr = parse_primary();
     while (check(TokenType::GreaterThan) || check(TokenType::GreaterEqual) ||
            check(TokenType::LessThan) || check(TokenType::LessEqual)) {
@@ -64,7 +64,7 @@ ExprNode* SqlParser::parse_comparison() {
     return expr;
 }
 
-ExprNode* SqlParser::parse_equality() {
+ExprNode* FilterParser::parse_equality() {
     ExprNode* expr = parse_comparison();
     while (check(TokenType::Equal) || check(TokenType::NotEqual)) {
         Token op_tok = advance();
@@ -75,7 +75,7 @@ ExprNode* SqlParser::parse_equality() {
     return expr;
 }
 
-ExprNode* SqlParser::parse_and() {
+ExprNode* FilterParser::parse_and() {
     ExprNode* expr = parse_equality();
     while (match(TokenType::And)) {
         ExprNode* right = parse_equality();
@@ -84,7 +84,7 @@ ExprNode* SqlParser::parse_and() {
     return expr;
 }
 
-ExprNode* SqlParser::parse_or() {
+ExprNode* FilterParser::parse_or() {
     ExprNode* expr = parse_and();
     while (match(TokenType::Or)) {
         ExprNode* right = parse_and();
@@ -93,11 +93,11 @@ ExprNode* SqlParser::parse_or() {
     return expr;
 }
 
-ExprNode* SqlParser::parse_expression() {
+ExprNode* FilterParser::parse_expression() {
     return parse_or();
 }
 
-Result<std::unique_ptr<SelectStatement>> SqlParser::parse_select() {
+Result<std::unique_ptr<SelectStatement>> FilterParser::parse_select() {
     if (!match(TokenType::Select)) {
         return Result<std::unique_ptr<SelectStatement>>::error(Status::InvalidArgument);
     }

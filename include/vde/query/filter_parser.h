@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vde/query/sql_lexer.h"
+#include "vde/query/filter_lexer.h"
 #include "vde/query/expression.h"
 #include <memory>
 #include <vector>
@@ -21,9 +21,9 @@ struct SelectStatement {
     }
 };
 
-class SqlParser {
+class FilterParser {
 public:
-    explicit SqlParser(std::vector<Token> tokens);
+    explicit FilterParser(std::vector<Token> tokens);
 
     Result<std::unique_ptr<SelectStatement>> parse_select();
 

@@ -143,11 +143,11 @@ private:
 };
 
 constexpr size_t kMaxSectionCount    = 1024;
-constexpr size_t kMaxRecordSize      = 16 * 1024 * 1024; // 16 MB
+constexpr size_t kMaxRecordSize      = 16 * 1024 * 1024;
 constexpr size_t kMaxNestingDepth    = 64;
 
 constexpr char kMagicBytes[4]        = {'V', 'D', 'X', '\x01'};
 constexpr uint8_t kFormatVersionMajor = 1;
 constexpr uint8_t kFormatVersionMinor = 2;
 
-} // namespace vde
+}

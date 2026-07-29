@@ -12,7 +12,7 @@ void RuleBasedOptimizer::add_rule(std::unique_ptr<OptimizerRule> rule) {
     if (rule) rules_.push_back(std::move(rule));
 }
 
-Status RuleBasedOptimizer::optimize(SelectQueryNode* node) {
+Status RuleBasedOptimizer::optimize(FilterQueryNode* node) {
     if (!node) return Status::InvalidArgument;
     for (const auto& rule : rules_) {
         rule->apply(node);
@@ -20,17 +20,17 @@ Status RuleBasedOptimizer::optimize(SelectQueryNode* node) {
     return Status::Ok;
 }
 
-bool ConstantFoldingRule::apply(SelectQueryNode* node) {
+bool ConstantFoldingRule::apply(FilterQueryNode* node) {
     (void)node;
     return true;
 }
 
-bool PredicatePushdownRule::apply(SelectQueryNode* node) {
+bool PredicatePushdownRule::apply(FilterQueryNode* node) {
     (void)node;
     return true;
 }
 
-bool ProjectionPruningRule::apply(SelectQueryNode* node) {
+bool ProjectionPruningRule::apply(FilterQueryNode* node) {
     (void)node;
     return true;
 }

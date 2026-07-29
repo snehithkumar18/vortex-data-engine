@@ -1,14 +1,14 @@
-#include "vde/storage/buffer_pool_manager.h"
+#include "vde/storage/memory_chunk_pool.h"
 #include <algorithm>
 
 namespace vde {
 
-BufferPoolManager::BufferPoolManager(size_t pool_size)
+MemoryChunkPool::MemoryChunkPool(size_t pool_size)
     : pool_size_(pool_size == 0 ? 4 : pool_size) {
     frames_.resize(pool_size_);
 }
 
-SlottedPage* BufferPoolManager::fetch_page(uint32_t page_id) {
+PayloadFrameBlock* MemoryChunkPool::fetch_page(uint32_t page_id) {
     auto it = page_table_.find(page_id);
     if (it != page_table_.end()) {
         size_t frame_id = it->second;
@@ -18,7 +18,7 @@ SlottedPage* BufferPoolManager::fetch_page(uint32_t page_id) {
     return nullptr;
 }
 
-SlottedPage* BufferPoolManager::new_page(uint32_t* out_page_id) {
+PayloadFrameBlock* MemoryChunkPool::new_page(uint32_t* out_page_id) {
     size_t target_frame = frames_.size();
     for (size_t i = 0; i < frames_.size(); ++i) {
         if (frames_[i].pin_count == 0) {
@@ -45,7 +45,7 @@ SlottedPage* BufferPoolManager::new_page(uint32_t* out_page_id) {
     return &frames_[target_frame].page;
 }
 
-bool BufferPoolManager::unpin_page(uint32_t page_id, bool is_dirty) {
+bool MemoryChunkPool::unpin_page(uint32_t page_id, bool is_dirty) {
     auto it = page_table_.find(page_id);
     if (it == page_table_.end()) return false;
     size_t frame_id = it->second;
@@ -56,7 +56,7 @@ bool BufferPoolManager::unpin_page(uint32_t page_id, bool is_dirty) {
     return true;
 }
 
-bool BufferPoolManager::flush_page(uint32_t page_id) {
+bool MemoryChunkPool::flush_page(uint32_t page_id) {
     auto it = page_table_.find(page_id);
     if (it == page_table_.end()) return false;
     size_t frame_id = it->second;

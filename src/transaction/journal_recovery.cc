@@ -1,12 +1,12 @@
-#include "vde/transaction/aries_recovery.h"
+#include "vde/transaction/journal_recovery.h"
 #include <algorithm>
 
 namespace vde {
 
-AriesRecoveryEngine::AriesRecoveryEngine(WriteAheadLog* wal)
+JournalRecoveryEngine::JournalRecoveryEngine(StateJournalLog* wal)
     : wal_(wal) {}
 
-uint64_t AriesRecoveryEngine::smallest_rec_lsn() const {
+uint64_t JournalRecoveryEngine::smallest_rec_lsn() const {
     if (dirty_page_table_.empty()) return 0;
     uint64_t min_lsn = UINT64_MAX;
     for (const auto& [page_id, entry] : dirty_page_table_) {
@@ -15,7 +15,7 @@ uint64_t AriesRecoveryEngine::smallest_rec_lsn() const {
     return min_lsn == UINT64_MAX ? 0 : min_lsn;
 }
 
-void AriesRecoveryEngine::analysis_pass() {
+void JournalRecoveryEngine::analysis_pass() {
     if (!wal_) return;
     auto logs = wal_->read_all_records();
 
@@ -40,7 +40,7 @@ void AriesRecoveryEngine::analysis_pass() {
     }
 }
 
-void AriesRecoveryEngine::redo_pass() {
+void JournalRecoveryEngine::redo_pass() {
     if (!wal_) return;
     uint64_t start_lsn = smallest_rec_lsn();
     auto logs = wal_->read_all_records();
@@ -55,7 +55,7 @@ void AriesRecoveryEngine::redo_pass() {
     }
 }
 
-void AriesRecoveryEngine::undo_pass() {
+void JournalRecoveryEngine::undo_pass() {
     if (!wal_) return;
     std::vector<tx_id_t> active_txs;
     for (const auto& [tx_id, tx_entry] : active_tx_table_) {
@@ -78,7 +78,7 @@ void AriesRecoveryEngine::undo_pass() {
     }
 }
 
-Status AriesRecoveryEngine::run_recovery_pass() {
+Status JournalRecoveryEngine::run_recovery_pass() {
     analysis_pass();
     redo_pass();
     undo_pass();

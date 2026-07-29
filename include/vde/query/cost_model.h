@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vde/query/sql_ast.h"
+#include "vde/query/filter_ast.h"
 #include <vector>
 #include <cstdint>
 

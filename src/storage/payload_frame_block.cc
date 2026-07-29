@@ -1,22 +1,22 @@
-#include "vde/storage/slotted_page.h"
+#include "vde/storage/payload_frame_block.h"
 
 namespace vde {
 
-SlottedPage::SlottedPage() {
+PayloadFrameBlock::PayloadFrameBlock() {
     header_ = reinterpret_cast<PageHeader*>(data_);
     slots_ = reinterpret_cast<Slot*>(data_ + sizeof(PageHeader));
     init(0);
 }
 
-SlottedPage::SlottedPage(uint32_t page_id) {
+PayloadFrameBlock::PayloadFrameBlock(uint32_t page_id) {
     header_ = reinterpret_cast<PageHeader*>(data_);
     slots_ = reinterpret_cast<Slot*>(data_ + sizeof(PageHeader));
     init(page_id);
 }
 
-Status SlottedPage::init(uint32_t page_id) {
+Status PayloadFrameBlock::init(uint32_t page_id) {
     std::memset(data_, 0, kPageSize);
-    header_->magic = kSlottedPageMagic;
+    header_->magic = kPayloadFrameBlockMagic;
     header_->page_id = page_id;
     header_->slot_count = 0;
     header_->free_space_pointer = static_cast<uint16_t>(kPageSize);
@@ -24,13 +24,13 @@ Status SlottedPage::init(uint32_t page_id) {
     return Status::Ok;
 }
 
-uint16_t SlottedPage::free_space() const {
+uint16_t PayloadFrameBlock::free_space() const {
     uint32_t slots_end = sizeof(PageHeader) + header_->slot_count * sizeof(Slot);
     if (header_->free_space_pointer < slots_end) return 0;
     return header_->free_space_pointer - static_cast<uint16_t>(slots_end);
 }
 
-int SlottedPage::insert_tuple(Span<const byte_t> tuple_data) {
+int PayloadFrameBlock::insert_tuple(Span<const byte_t> tuple_data) {
     uint16_t needed = static_cast<uint16_t>(sizeof(Slot) + tuple_data.size());
     if (free_space() < needed) return -1;
 
@@ -46,7 +46,7 @@ int SlottedPage::insert_tuple(Span<const byte_t> tuple_data) {
     return slot_id;
 }
 
-Status SlottedPage::get_tuple(uint16_t slot_id, OwnedBuffer* out_tuple) const {
+Status PayloadFrameBlock::get_tuple(uint16_t slot_id, OwnedBuffer* out_tuple) const {
     if (slot_id >= header_->slot_count || !out_tuple) return Status::InvalidArgument;
     const Slot& slot = slots_[slot_id];
     if (slot.length == 0) return Status::NotFound;
@@ -56,7 +56,7 @@ Status SlottedPage::get_tuple(uint16_t slot_id, OwnedBuffer* out_tuple) const {
     return Status::Ok;
 }
 
-Status SlottedPage::delete_tuple(uint16_t slot_id) {
+Status PayloadFrameBlock::delete_tuple(uint16_t slot_id) {
     if (slot_id >= header_->slot_count) return Status::InvalidArgument;
     slots_[slot_id].length = 0;
     return Status::Ok;

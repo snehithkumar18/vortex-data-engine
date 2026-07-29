@@ -19,9 +19,9 @@ struct ColumnMetadata {
     std::string default_value;
 };
 
-class TableDescriptor {
+class ChannelDescriptor {
 public:
-    TableDescriptor(std::string name, Schema schema);
+    ChannelDescriptor(std::string name, Schema schema);
 
     const std::string& name() const { return name_; }
     const Schema& schema() const { return schema_; }

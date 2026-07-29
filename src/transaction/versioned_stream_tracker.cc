@@ -1,12 +1,12 @@
-#include "vde/transaction/mvcc_storage.h"
+#include "vde/transaction/versioned_stream_tracker.h"
 
 namespace vde {
 
-MvccStorageEngine::MvccStorageEngine() {
+VersionedStreamTracker::VersionedStreamTracker() {
     row_chains_.resize(max_rows_, nullptr);
 }
 
-MvccStorageEngine::~MvccStorageEngine() {
+VersionedStreamTracker::~VersionedStreamTracker() {
     std::unique_lock<std::shared_mutex> lock(engine_mutex_);
     for (size_t i = 0; i < row_chains_.size(); ++i) {
         TupleVersion* curr = row_chains_[i];
@@ -19,13 +19,13 @@ MvccStorageEngine::~MvccStorageEngine() {
     }
 }
 
-bool MvccStorageEngine::is_version_visible(tx_id_t tx_id, const TupleVersion& version) const {
+bool VersionedStreamTracker::is_version_visible(tx_id_t tx_id, const TupleVersion& version) const {
     if (version.xmin > tx_id) return false;
     if (version.xmax != 0 && version.xmax <= tx_id) return false;
     return true;
 }
 
-Status MvccStorageEngine::insert_tuple(tx_id_t tx_id, uint64_t row_id, Span<const byte_t> tuple_data) {
+Status VersionedStreamTracker::insert_tuple(tx_id_t tx_id, uint64_t row_id, Span<const byte_t> tuple_data) {
     if (row_id >= max_rows_) return Status::InvalidArgument;
     std::unique_lock<std::shared_mutex> lock(engine_mutex_);
 
@@ -40,7 +40,7 @@ Status MvccStorageEngine::insert_tuple(tx_id_t tx_id, uint64_t row_id, Span<cons
     return Status::Ok;
 }
 
-Status MvccStorageEngine::update_tuple(tx_id_t tx_id, uint64_t row_id, Span<const byte_t> new_data) {
+Status VersionedStreamTracker::update_tuple(tx_id_t tx_id, uint64_t row_id, Span<const byte_t> new_data) {
     if (row_id >= max_rows_) return Status::InvalidArgument;
     std::unique_lock<std::shared_mutex> lock(engine_mutex_);
 
@@ -60,7 +60,7 @@ Status MvccStorageEngine::update_tuple(tx_id_t tx_id, uint64_t row_id, Span<cons
     return Status::Ok;
 }
 
-Status MvccStorageEngine::delete_tuple(tx_id_t tx_id, uint64_t row_id) {
+Status VersionedStreamTracker::delete_tuple(tx_id_t tx_id, uint64_t row_id) {
     if (row_id >= max_rows_) return Status::InvalidArgument;
     std::unique_lock<std::shared_mutex> lock(engine_mutex_);
 
@@ -71,7 +71,7 @@ Status MvccStorageEngine::delete_tuple(tx_id_t tx_id, uint64_t row_id) {
     return Status::Ok;
 }
 
-Status MvccStorageEngine::read_tuple(tx_id_t tx_id, uint64_t row_id, OwnedBuffer* out_data) const {
+Status VersionedStreamTracker::read_tuple(tx_id_t tx_id, uint64_t row_id, OwnedBuffer* out_data) const {
     if (row_id >= max_rows_ || !out_data) return Status::InvalidArgument;
     std::shared_lock<std::shared_mutex> lock(engine_mutex_);
 
@@ -87,7 +87,7 @@ Status MvccStorageEngine::read_tuple(tx_id_t tx_id, uint64_t row_id, OwnedBuffer
     return Status::NotFound;
 }
 
-void MvccStorageEngine::vacuum_garbage_collect(tx_id_t oldest_active_tx) {
+void VersionedStreamTracker::vacuum_garbage_collect(tx_id_t oldest_active_tx) {
     std::unique_lock<std::shared_mutex> lock(engine_mutex_);
     for (size_t i = 0; i < row_chains_.size(); ++i) {
         TupleVersion* curr = row_chains_[i];
@@ -112,7 +112,7 @@ void MvccStorageEngine::vacuum_garbage_collect(tx_id_t oldest_active_tx) {
     }
 }
 
-size_t MvccStorageEngine::total_versions(uint64_t row_id) const {
+size_t VersionedStreamTracker::total_versions(uint64_t row_id) const {
     if (row_id >= max_rows_) return 0;
     std::shared_lock<std::shared_mutex> lock(engine_mutex_);
     size_t count = 0;

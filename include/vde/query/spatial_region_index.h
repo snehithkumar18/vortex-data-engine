@@ -23,18 +23,18 @@ struct BoundingBox {
     }
 };
 
-struct RTreeNode {
+struct SpatialRegionNode {
     bool is_leaf = true;
     BoundingBox bbox;
     std::vector<size_t> record_indices;
     std::vector<BoundingBox> child_boxes;
-    std::vector<std::unique_ptr<RTreeNode>> children;
+    std::vector<std::unique_ptr<SpatialRegionNode>> children;
 };
 
-class RTreeIndex {
+class SpatialRegionIndex {
 public:
-    explicit RTreeIndex(size_t max_entries = 8);
-    ~RTreeIndex() = default;
+    explicit SpatialRegionIndex(size_t max_entries = 8);
+    ~SpatialRegionIndex() = default;
 
     void insert(const BoundingBox& box, size_t record_index);
     std::vector<size_t> query_range(const BoundingBox& range) const;
@@ -42,10 +42,10 @@ public:
     size_t total_items() const { return total_items_; }
 
 private:
-    void query_recursive(const RTreeNode* node, const BoundingBox& range, std::vector<size_t>& results) const;
+    void query_recursive(const SpatialRegionNode* node, const BoundingBox& range, std::vector<size_t>& results) const;
     BoundingBox compute_bounds(const std::vector<BoundingBox>& boxes) const;
 
-    std::unique_ptr<RTreeNode> root_;
+    std::unique_ptr<SpatialRegionNode> root_;
     size_t max_entries_;
     size_t total_items_ = 0;
 };

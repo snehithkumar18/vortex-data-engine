@@ -1,6 +1,6 @@
 #include "vde/pipeline/pipeline.h"
-#include "vde/query/sql_lexer.h"
-#include "vde/query/sql_parser.h"
+#include "vde/query/filter_lexer.h"
+#include "vde/query/filter_parser.h"
 #include "vde/query/query_planner.h"
 #include <iostream>
 #include <fstream>
@@ -27,9 +27,9 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    vde::SqlLexer lexer(argv[2]);
+    vde::FilterLexer lexer(argv[2]);
     auto tokens = lexer.tokenize();
-    vde::SqlParser parser(std::move(tokens));
+    vde::FilterParser parser(std::move(tokens));
     auto select_res = parser.parse_select();
 
     if (!select_res.has_value()) {

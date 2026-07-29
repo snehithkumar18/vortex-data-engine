@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vde/query/sql_parser.h"
+#include "vde/query/filter_parser.h"
 #include "vde/record/record_batch.h"
 #include "vde/query/evaluator.h"
 #include <memory>

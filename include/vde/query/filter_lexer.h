@@ -49,9 +49,9 @@ struct Token {
     double float_val = 0.0;
 };
 
-class SqlLexer {
+class FilterLexer {
 public:
-    explicit SqlLexer(std::string_view query);
+    explicit FilterLexer(std::string_view query);
 
     std::vector<Token> tokenize();
 

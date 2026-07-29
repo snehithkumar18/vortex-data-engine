@@ -1,8 +1,8 @@
-#include "vde/query/sql_ast.h"
+#include "vde/query/filter_ast.h"
 
 namespace vde {
 
-void TableRefNode::accept(AstVisitor* visitor) {
+void ChannelRefNode::accept(AstVisitor* visitor) {
     if (visitor) visitor->visit(this);
 }
 
@@ -18,20 +18,20 @@ void BinaryOpNode::accept(AstVisitor* visitor) {
     if (visitor) visitor->visit(this);
 }
 
-void SelectQueryNode::accept(AstVisitor* visitor) {
+void FilterQueryNode::accept(AstVisitor* visitor) {
     if (visitor) visitor->visit(this);
 }
 
-void SelectQueryNode::add_projection(std::unique_ptr<SqlAstNode> proj, std::string alias) {
+void FilterQueryNode::add_projection(std::unique_ptr<FilterAstNode> proj, std::string alias) {
     projections_.push_back(std::move(proj));
     aliases_.push_back(std::move(alias));
 }
 
-void SelectQueryNode::set_from_table(std::unique_ptr<TableRefNode> table) {
+void FilterQueryNode::set_from_table(std::unique_ptr<ChannelRefNode> table) {
     from_table_ = std::move(table);
 }
 
-void SelectQueryNode::set_where_clause(std::unique_ptr<SqlAstNode> where) {
+void FilterQueryNode::set_where_clause(std::unique_ptr<FilterAstNode> where) {
     where_clause_ = std::move(where);
 }
 

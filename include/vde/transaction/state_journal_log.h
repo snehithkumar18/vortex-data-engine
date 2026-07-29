@@ -26,9 +26,9 @@ struct LogRecord {
     OwnedBuffer after_image;
 };
 
-class WriteAheadLog {
+class StateJournalLog {
 public:
-    WriteAheadLog() = default;
+    StateJournalLog() = default;
 
     uint64_t append_record(LogRecord record);
     Status flush();

@@ -1,8 +1,8 @@
 #include "tests/test_framework.h"
-#include "vde/catalog/catalog.h"
+#include "vde/telemetry_registry/telemetry_registry.h"
 
-TEST(catalog_create_drop_table) {
-    vde::Catalog& cat = vde::Catalog::instance();
+TEST(telemetry_registry_create_drop_table) {
+    vde::TelemetryRegistry& cat = vde::TelemetryRegistry::instance();
     cat.clear();
 
     vde::Schema schema;

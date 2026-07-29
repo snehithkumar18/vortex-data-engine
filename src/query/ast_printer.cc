@@ -2,14 +2,14 @@
 
 namespace vde {
 
-std::string AstPrinter::print(SqlAstNode* node) {
+std::string AstPrinter::print(FilterAstNode* node) {
     result_.clear();
     indent_ = 0;
     if (node) node->accept(this);
     return result_;
 }
 
-void AstPrinter::visit(TableRefNode* node) {
+void AstPrinter::visit(ChannelRefNode* node) {
     result_ += "TableRef(" + node->table_name() + ")";
 }
 
@@ -30,8 +30,8 @@ void AstPrinter::visit(BinaryOpNode* node) {
     result_ += ")";
 }
 
-void AstPrinter::visit(SelectQueryNode* node) {
-    result_ += "SelectQueryNode[\n";
+void AstPrinter::visit(FilterQueryNode* node) {
+    result_ += "FilterQueryNode[\n";
     if (node->from_table()) {
         result_ += "  FROM: ";
         node->from_table()->accept(this);

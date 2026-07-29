@@ -17,10 +17,10 @@ struct TupleVersion {
     TupleVersion* prev = nullptr;
 };
 
-class MvccStorageEngine {
+class VersionedStreamTracker {
 public:
-    MvccStorageEngine();
-    ~MvccStorageEngine();
+    VersionedStreamTracker();
+    ~VersionedStreamTracker();
 
     Status insert_tuple(tx_id_t tx_id, uint64_t row_id, Span<const byte_t> tuple_data);
     Status update_tuple(tx_id_t tx_id, uint64_t row_id, Span<const byte_t> new_data);

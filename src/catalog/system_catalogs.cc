@@ -1,10 +1,10 @@
-#include "vde/catalog/system_catalogs.h"
+#include "vde/telemetry_registry/system_telemetry_registrys.h"
 
 namespace vde {
 
-RecordBatch SystemCatalogs::build_sys_tables_batch() {
+RecordBatch SystemTelemetryRegistrys::build_sys_tables_batch() {
     RecordBatch batch;
-    Catalog& cat = Catalog::instance();
+    TelemetryRegistry& cat = TelemetryRegistry::instance();
     auto table_names = cat.list_tables();
 
     uint32_t id = 1;
@@ -18,14 +18,14 @@ RecordBatch SystemCatalogs::build_sys_tables_batch() {
     return batch;
 }
 
-RecordBatch SystemCatalogs::build_sys_columns_batch() {
+RecordBatch SystemTelemetryRegistrys::build_sys_columns_batch() {
     RecordBatch batch;
-    Catalog& cat = Catalog::instance();
+    TelemetryRegistry& cat = TelemetryRegistry::instance();
     auto table_names = cat.list_tables();
 
     uint32_t id = 1;
     for (const auto& tname : table_names) {
-        const TableDescriptor* desc = cat.get_table(tname);
+        const ChannelDescriptor* desc = cat.get_table(tname);
         if (desc) {
             for (const auto& col : desc->columns()) {
                 Record r;
@@ -41,7 +41,7 @@ RecordBatch SystemCatalogs::build_sys_columns_batch() {
     return batch;
 }
 
-RecordBatch SystemCatalogs::build_sys_indexes_batch() {
+RecordBatch SystemTelemetryRegistrys::build_sys_indexes_batch() {
     RecordBatch batch;
     return batch;
 }
