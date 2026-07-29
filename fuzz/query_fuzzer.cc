@@ -61,7 +61,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
             vde::SortedIndex index;
             index.build(batch, 0);
             if (index.is_built()) {
-                vde::FieldValue key(uint32_t(42));
+                uint32_t lookup_val = (size > 4) ? *reinterpret_cast<const uint32_t*>(data) : 42;
+                vde::FieldValue key(lookup_val);
                 std::vector<size_t> results;
                 index.lookup(key, &results);
             }
@@ -81,7 +82,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         if (size % 2 == 0) {
             cache.commit();
             cache.begin();
-            cache.store("new_key", vde::FieldValue(uint32_t(999)));
+            uint32_t val_new = (size > 6) ? *reinterpret_cast<const uint16_t*>(data + 4) : 999;
+            cache.store("new_key", vde::FieldValue(val_new));
             cache.rollback();
         } else {
             cache.rollback();

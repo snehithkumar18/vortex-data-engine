@@ -8,14 +8,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     vde::StreamManager mgr(16);
 
-
     mgr.set_completion_callback([&mgr](uint32_t stream_id, vde::OwnedBuffer completed_data) {
         if (completed_data.size() > 0) {
             vde::Fragment new_frag;
             new_frag.stream_id = stream_id + 100;
             new_frag.sequence_num = 0;
             new_frag.flags = vde::FragmentFlags::First | vde::FragmentFlags::Last;
-            new_frag.payload = vde::Span<const vde::byte_t>(completed_data.data(), std::min(completed_data.size(), size_t(64)));
+            new_frag.payload = vde::Span<const vde::byte_t>(completed_data.data(), completed_data.size());
             new_frag.payload_size = static_cast<uint16_t>(new_frag.payload.size());
             new_frag.timestamp = 1000;
             mgr.process_fragment(new_frag);
@@ -58,11 +57,12 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                 frag.sequence_num = data[pos + 1];
                 frag.flags = vde::FragmentFlags::Retransmit;
                 pos += 2;
-                {
-                    std::vector<vde::byte_t> temp_buf(64, 0x41);
-                    frag.payload = vde::Span<const vde::byte_t>(temp_buf.data(), temp_buf.size());
-                    frag.payload_size = 64;
+                size_t payload_len = std::min(size_t(64), size - pos);
+                if (payload_len > 0) {
+                    frag.payload = vde::Span<const vde::byte_t>(data + pos, payload_len);
+                    frag.payload_size = static_cast<uint16_t>(payload_len);
                     frag.timestamp = fake_time++;
+                    pos += payload_len;
                     mgr.process_fragment(frag);
                 }
                 break;
