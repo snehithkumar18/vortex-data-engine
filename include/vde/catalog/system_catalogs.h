@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vde/telemetry_registry/telemetry_registry.h"
+#include "vde/catalog/telemetry_registry.h"
 #include "vde/record/record_batch.h"
 #include <string>
 

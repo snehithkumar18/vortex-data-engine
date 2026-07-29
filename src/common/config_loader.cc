@@ -5,7 +5,8 @@ namespace vde {
 
 Status ConfigLoader::parse_string(std::string_view text) {
     entries_.clear();
-    std::istringstream stream(std::string(text));
+    std::string s_text(text);
+    std::istringstream stream(s_text);
     std::string line;
 
     while (std::getline(stream, line)) {
@@ -15,10 +16,8 @@ Status ConfigLoader::parse_string(std::string_view text) {
             std::string key = line.substr(0, eq_pos);
             std::string val = line.substr(eq_pos + 1);
 
-
             key.erase(0, key.find_first_not_of(" \t"));
             key.erase(key.find_last_not_of(" \t") + 1);
-
 
             val.erase(0, val.find_first_not_of(" \t"));
             val.erase(val.find_last_not_of(" \t") + 1);
@@ -48,15 +47,10 @@ int64_t ConfigLoader::get_int(const std::string& key, int64_t fallback) const {
 bool ConfigLoader::get_bool(const std::string& key, bool fallback) const {
     auto it = entries_.find(key);
     if (it != entries_.end()) {
-        std::string val = it->second;
-        if (val == "true" || val == "1" || val == "yes") return true;
-        if (val == "false" || val == "0" || val == "no") return false;
+        if (it->second == "true" || it->second == "1" || it->second == "yes") return true;
+        if (it->second == "false" || it->second == "0" || it->second == "no") return false;
     }
     return fallback;
-}
-
-bool ConfigLoader::has_key(const std::string& key) const {
-    return entries_.find(key) != entries_.end();
 }
 
 }

@@ -1,4 +1,4 @@
-#include "vde/telemetry_registry/channel_descriptor.h"
+#include "vde/catalog/channel_descriptor.h"
 
 namespace vde {
 

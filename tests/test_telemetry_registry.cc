@@ -1,5 +1,5 @@
 #include "tests/test_framework.h"
-#include "vde/telemetry_registry/telemetry_registry.h"
+#include "vde/catalog/telemetry_registry.h"
 
 TEST(telemetry_registry_create_drop_table) {
     vde::TelemetryRegistry& cat = vde::TelemetryRegistry::instance();

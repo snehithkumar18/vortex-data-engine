@@ -1,4 +1,4 @@
-#include "vde/telemetry_registry/system_telemetry_registrys.h"
+#include "vde/catalog/system_catalogs.h"
 
 namespace vde {
 

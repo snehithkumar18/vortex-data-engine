@@ -142,12 +142,16 @@ private:
     std::vector<byte_t> storage_;
 };
 
-constexpr size_t kMaxSectionCount    = 1024;
-constexpr size_t kMaxRecordSize      = 16 * 1024 * 1024;
-constexpr size_t kMaxNestingDepth    = 64;
+constexpr size_t kMaxSectionCount      = 1024;
+constexpr size_t kMaxRecordSize        = 16 * 1024 * 1024;
+constexpr size_t kMaxNestingDepth      = 64;
 
-constexpr char kMagicBytes[4]        = {'V', 'D', 'X', '\x01'};
-constexpr uint8_t kFormatVersionMajor = 1;
-constexpr uint8_t kFormatVersionMinor = 2;
+constexpr size_t kFileHeaderSize       = 32;
+constexpr size_t kSectionEntrySize     = 20;
+constexpr uint16_t kMetadataInheritKey = 0xFFFF;
+
+constexpr char kMagicBytes[4]          = {'V', 'D', 'X', '\x01'};
+constexpr uint8_t kFormatVersionMajor   = 1;
+constexpr uint8_t kFormatVersionMinor   = 2;
 
 }

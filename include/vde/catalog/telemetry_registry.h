@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vde/telemetry_registry/channel_descriptor.h"
+#include "vde/catalog/channel_descriptor.h"
 #include "vde/query/index.h"
 #include "vde/query/btree_index.h"
 #include "vde/query/hash_index.h"
