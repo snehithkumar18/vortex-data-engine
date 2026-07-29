@@ -12,7 +12,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     vde::Span<const vde::byte_t> input(data, size);
 
-
     vde::ExprNode* root = nullptr;
     {
         vde::ByteReader br(input);
@@ -26,7 +25,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         for (int i = 0; i < 5 && br2.remaining() > 4; ++i) {
             auto type_byte = br2.read_u8();
             if (type_byte.has_value()) {
-                switch (type_byte.value() % 4) {
+                switch (type_byte.value % 4) {
                     case 0: record.fields.emplace_back(br2.read_u32_le().value_or(0)); break;
                     case 1: record.fields.emplace_back(static_cast<int64_t>(br2.read_i64_le().value_or(0))); break;
                     case 2: record.fields.emplace_back(br2.read_f64_le().value_or(0.0)); break;
@@ -45,7 +44,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
         vde::free_expression(root);
     }
-
 
     {
         vde::RecordBatch batch;
@@ -70,7 +68,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         }
     }
 
-
     {
         vde::TransactionCache cache;
         cache.begin();
@@ -78,7 +75,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         for (int i = 0; i < 5 && br4.remaining() > 4; ++i) {
             auto val = br4.read_u32_le();
             if (val.has_value()) {
-                cache.store("key" + std::to_string(i), vde::FieldValue(val.value()));
+                cache.store("key" + std::to_string(i), vde::FieldValue(val.value));
             }
         }
         if (size % 2 == 0) {
